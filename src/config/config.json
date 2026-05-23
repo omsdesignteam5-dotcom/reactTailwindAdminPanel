@@ -1,0 +1,537 @@
+{
+  "apiUrl": "http://192.168.100.4:5273/",
+  "webUrl": "http://localhost:3000/instaposadmin/",
+  "imageDisplayUrl": "http://192.168.100.4:5273/Zay/Upload/Images/",
+  "imageUploadUrl": "http://192.168.100.4:5273/api/fileUpload/imageupload",
+  "imageDeleteUrl": "http://192.168.100.4:5273/api/fileUpload/deleteimage",
+  "fileUploadUrl": "http://192.168.100.4:5273/api/fileUpload/fileupload",
+  "fileDeleteUrl": "http://192.168.100.4:5273/api/fileUpload/deleteFile",
+  "memberApiUrl": "https://www.12zay.com/posdevmemberapi/",
+  "notiApiUrl": "https://www.12zay.com/posdevnotiapi/",
+  "notiSoundUrl": "https://www.12zay.com/axtradev/notification.mp3",
+  "GoogleApiKey": "AIzaSyB_6oO2TUvGVVfeLumZz85wO8jsIkwRAW0",
+  "baseRoute": "/posdevadmin",
+  "memberProductDetailUrl": "https://www.12zay.com/axtradev/productDetail/",
+  "SHOP_URL": "https://www.12zay.com/axtradev/productList/",
+  "MEMBER_QRCODE_URL": "https://www.12zay.com/axtradev/pos/productList/",
+  "ORDER_DETAIL_URL": "https://www.12zay.com/axtradev/activityDetail/",
+  "BILL_DETAIL_URL": "https://www.12zay.com/axtradev/edc/detail/",
+  "CREATE": "create",
+  "UPDATE": "update",
+  "DELETE": "delete",
+  "CURRENCY_CODE": "kyats",
+  "DEFAULT_PAGE": 1,
+  "DEFAULT_PAGESIZE": 10,
+  "DEFAULT_SORTCOLUMN": "id",
+  "DEFAULT_SORTORDER": "DESC",
+  "DEFAULT_PAGERANGEDISPLAY": 3,
+  "SUPER_ADMIN": "super-admin",
+  "MERCHANT": "merchant",
+  "MANAGER": "manager",
+  "SHOP": "shop",
+  "CALLCENTER": "call-center",
+  "KITCHEN": "kitchen",
+  "CASHER": "casher",
+  "WAITER": "waiter",
+  "WAREHOUSE_MANAGER": "warehouse-manager",
+  "CANCELLABLE_MINUTES": 5,
+  "Status": [
+    { "id": 0, "name": "disabled" },
+    { "id": 1, "name": "enabled" }
+  ],
+  "OrderStatus": [
+    { "id": "0", "value": "0", "name": "processing", "label": "processing" },
+    { "id": 1, "value": 1, "name": "delivered", "label": "delivered" },
+    { "id": 2, "value": 2, "name": "cooking", "label": "cooking" },
+    { "id": 3, "value": 3, "name": "readyToGo", "label": "readyToGo" },
+    { "id": 4, "value": 4, "name": "purchased", "label": "purchased" },
+    { "id": 5, "value": 5, "name": "cancelByShop", "label": "cancelByShop" },
+    {
+      "id": 6,
+      "value": 6,
+      "name": "cancelByMember",
+      "label": "cancelByMember"
+    },
+    { "id": 7, "value": 7, "name": "serving", "label": "serving" },
+    { "id": 71, "value": 71, "name": "cancel", "label": "cancel" },
+    { "id": 72, "value": 72, "name": "cancel", "label": "cancel" }
+  ],
+  "OrderStatusForTable": [
+    { "id": 2, "value": 2, "name": "cooking", "label": "cooking" },
+    { "id": 3, "value": 3, "name": "readyToGo", "label": "readyToGo" },
+    { "id": 4, "value": 4, "name": "newOrder", "label": "newOrder" },
+    { "id": 7, "value": 7, "name": "going", "label": "going" }
+  ],
+  "PaymentStatus": [
+    { "id": "0", "name": "notPaid" },
+    { "id": 1, "name": "paid" },
+    { "id": 5, "name": "pending" },
+    { "id": 7, "name": "refund" },
+    { "id": 71, "name": "partialRefund" },
+    { "id": 72, "name": "fullyRefund" },
+    { "id": 8, "name": "cancel" },
+    { "id": 9, "name": "reOrder" },
+    { "id": 9, "name": "partinalReOrder" },
+    { "id": 9, "name": "fullyReOrder" }
+  ],
+  "TransactionStatus": [
+    { "id": 1, "name": "success" },
+    { "id": 5, "name": "pending" },
+    { "id": 8, "name": "cancel" }
+  ],
+  "PendingStatus": 0,
+  "DeliverOrSuccessStatus": 1,
+  "CookingStatus": 2,
+  "ReadyToGoStatus": 3,
+  "PurchasedStatus": 4,
+  "CancelByShopStatus": 5,
+  "CancelByMemberStatus": 6,
+  "ReserveStatus": 7,
+  "CashReturnStatus": 8,
+  "ReOrderStatus": 9,
+  "ReplaceStatus": 10,
+  "PartialReOrderStatus": 91,
+  "FullyReOrderStatus": 92,
+  "PartialRefundStatus": 71,
+  "FullyRefundStatus": 72,
+  "PaymentStatusNotPaid": 0,
+  "PaymentStatusPaid": 1,
+  "PaymentStatusPending": 5,
+  "PaymentStatusRefund": 7,
+  "PaymentStatusPartialRefund": 71,
+  "PaymentStatusFullyRefund": 72,
+  "PaymentStatusCancel": 8,
+  "PaymentStatusReOrder": 9,
+  "PaymentStatusPartialReOrder": 9,
+  "PaymentStatusFullyReOrder": 9,
+  "PICKUP": "pick-up",
+  "RESERVED": "dine-in",
+  "DELIVERY": "delivery",
+  "POS": "pos",
+  "ShopUserRoles": [
+    { "id": "merchant", "name": "owner" },
+    { "id": "manager", "name": "manager" },
+    { "id": "casher", "name": "casher" },
+    { "id": "kitchen", "name": "kitchen" },
+    { "id": "waiter", "name": "waiter" }
+  ],
+  "TranTypes": [
+    {
+      "id": 1,
+      "value": 1,
+      "name": "pointSubscribe",
+      "label": "pointSubscribe"
+    },
+    {
+      "id": 2,
+      "value": 2,
+      "name": "pointGive",
+      "label": "pointGive"
+    },
+    {
+      "id": 3,
+      "value": 3,
+      "name": "payment",
+      "label": "payment"
+    },
+    {
+      "id": 4,
+      "value": 4,
+      "name": "pointAndWalletTopUp",
+      "label": "pointAndWalletTopUp"
+    },
+    {
+      "id": 5,
+      "value": 5,
+      "name": "shiftTransferOut",
+      "label": "shiftTransferOut"
+    },
+    {
+      "id": 6,
+      "value": 6,
+      "name": "pointRevertGiven",
+      "label": "pointRevertGiven"
+    },
+    {
+      "id": 7,
+      "value": 7,
+      "name": "shiftTransferIn",
+      "label": "shiftTransferIn"
+    },
+    {
+      "id": 8,
+      "value": 8,
+      "name": "refund",
+      "label": "refund"
+    }
+  ],
+  "TranTypePointSubscribe": 1,
+  "TranTypePointGive": 2,
+  "TranTypePayment": 3,
+  "TranTypePointAndWalletTopUp": 4,
+  "TranTypeShiftTransferOut": 5,
+  "TranTypePointRevertGiven": 6,
+  "TranTypeShiftTransferIn": 7,
+  "TranTypeRefund": 8,
+  "TranTypeRefundToWallet": 9,
+  "TranTypeUnsubscribe": 10,
+  "TranTypeSubscribePayment": 11,
+  "TranStatus": [
+    {
+      "id": 1,
+      "value": 1,
+      "name": "success",
+      "label": "success"
+    },
+    {
+      "id": 5,
+      "value": 5,
+      "name": "pending",
+      "label": "pending"
+    },
+    {
+      "id": 6,
+      "value": 6,
+      "name": "creditSuccess",
+      "label": "creditSuccess"
+    },
+    {
+      "id": 7,
+      "value": 7,
+      "name": "refundSuccessForOriginalTran",
+      "label": "refundSuccessForOriginalTran"
+    },
+    {
+      "id": 8,
+      "value": 8,
+      "name": "reversedOrCancelledAndCashOutCancel",
+      "label": "reversedOrCancelledAndCashOutCancel"
+    },
+    {
+      "id": 9,
+      "value": 9,
+      "name": "failed",
+      "label": "failed"
+    }
+  ],
+  "TranStatusSuccess": 1,
+  "TranStatusPending": 5,
+  "TranStatusCreditSuccess": 6,
+  "TranStatusRefundSuccessForOriginalTran": 7,
+  "TranStatusReversedOrCancelledAndCashOutCancel": 8,
+  "TranStatusFailed": 9,
+  "PointTypes": [
+    {
+      "id": "1",
+      "value": "1",
+      "name": "subscribe",
+      "label": "subscribe"
+    },
+    {
+      "id": "2",
+      "value": "2",
+      "name": "addition",
+      "label": "addition"
+    },
+    {
+      "id": "3",
+      "value": "3",
+      "name": "redemption",
+      "label": "redemption"
+    },
+    {
+      "id": "5",
+      "value": "5",
+      "name": "fill",
+      "label": "fill"
+    },
+    {
+      "id": "6",
+      "value": "6",
+      "name": "reversed",
+      "label": "reversed"
+    },
+    {
+      "id": "8",
+      "value": "8",
+      "name": "refund",
+      "label": "refund"
+    }
+  ],
+  "PointTypeSubscribe": "1",
+  "PointTypeAddition": "2",
+  "PointTypeRedemption": "3",
+  "PointTypeFill": "5",
+  "PointTypeReversed": "6",
+  "PointTypeRefund": "8",
+  "VoucherCodeTypes": [
+    {
+      "id": "1",
+      "name": "voucherCode"
+    },
+    {
+      "id": "2",
+      "name": "coupon"
+    }
+  ],
+  "Usages": [
+    {
+      "id": "0",
+      "name": "both",
+      "label": "both"
+    },
+    {
+      "id": "1",
+      "name": "shopOnly",
+      "label": "shopOnly"
+    },
+    {
+      "id": "2",
+      "name": "inventoryOnly",
+      "label": "inventoryOnly"
+    }
+  ],
+  "ReturnCancelTypes": [
+    {
+      "id": true,
+      "value": true,
+      "name": "Re-Order",
+      "label": "Re-Order"
+    },
+    {
+      "id": false,
+      "value": false,
+      "name": "Cash Refund",
+      "label": "Cash Refund"
+    }
+  ],
+  "taxPercent": 5,
+  "OrderTypeForClaimPoint": 6,
+  "levelUpgradeStatus": [
+    {
+      "id": "0",
+      "name": "pending"
+    },
+    {
+      "id": "1",
+      "name": "accept"
+    },
+    {
+      "id": "9",
+      "name": "reject"
+    }
+  ],
+  "ShopTypes": [
+    {
+      "id": "restaurant",
+      "value": "restaurant",
+      "name": "Restaurant",
+      "label": "Restaurant"
+    },
+    {
+      "id": "hotel",
+      "value": "hotel",
+      "name": "Hotel",
+      "label": "Hotel"
+    },
+    {
+      "id": "shop",
+      "value": "shop",
+      "name": "Shop",
+      "label": "Shop"
+    }
+  ],
+  "tableTypes": [
+    { "id": "circle", "name": "Circle" },
+    { "id": "square", "name": "Square" },
+    { "id": "rectangle", "name": "Rectangle" }
+  ],
+  "tableImageTypes": [
+    { "id": "table", "name": "Table" },
+    { "id": "sofa", "name": "Sofa" },
+    { "id": "stool", "name": "Stool" },
+    { "id": "seat", "name": "Seat" }
+  ],
+  "ShiftTypes": [
+    { "id": 1, "value": 1, "name": "endShift", "label": "endShift" },
+    { "id": 2, "value": 2, "name": "endOfDay", "label": "endOfDay" }
+  ],
+  "DiscountRoles": [
+    {
+      "id": "manager",
+      "value": "manager",
+      "name": "manager",
+      "label": "manager",
+      "isChecked": false
+    },
+    {
+      "id": "casher",
+      "value": "casher",
+      "name": "casher",
+      "label": "casher",
+      "isChecked": false
+    }
+  ],
+  "SubscribePaymentStatus": [
+    {
+      "id": "5",
+      "name": "pending"
+    },
+    {
+      "id": "1",
+      "name": "accept"
+    },
+    {
+      "id": "9",
+      "name": "reject"
+    }
+  ],
+  "pending": "pending",
+  "processing": "processing",
+  "done": "done",
+  "received": "received",
+  "returned": "returned",
+  "supplier": "supplier",
+  "warehouse": "warehouse",
+  "customerReturn": "customerReturn",
+  "purchaseOrder": "purchaseOrder",
+  "stockTransferProduct": "stockTransferProduct",
+  "Restaurant": "Restaurant",
+  "Shop": "Shop",
+  "Hotel": "Hotel",
+  "ProductDownloadColumns": [
+    {
+      "name": "Name",
+      "value": "name"
+    },
+    {
+      "name": "Description",
+      "value": "description"
+    },
+    {
+      "name": "Price",
+      "value": "price"
+    },
+    {
+      "name": "Given Point",
+      "value": "givenPoint"
+    },
+    {
+      "name": "Barcode",
+      "value": "barCode"
+    },
+    {
+      "name": "Order Type",
+      "value": "orderType"
+    },
+    {
+      "name": "Is Cooking Required",
+      "value": "isCookingRequired"
+    },
+    {
+      "name": "Is Quantity On",
+      "value": "isQuantityOn"
+    },
+    {
+      "name": "Added Price",
+      "value": "addedPrice"
+    },
+    {
+      "name": "Category Code",
+      "value": "categoryCode"
+    }
+  ],
+  "NotificationTypes": [
+    {
+      "id": "1",
+      "value": "1",
+      "name": "order",
+      "label": "order"
+    },
+    {
+      "id": "2",
+      "value": "2",
+      "name": "account",
+      "label": "account"
+    }
+  ],
+  "ExpenseTypes": [
+    {
+      "id": 1,
+      "value": 1,
+      "label": "fixed",
+      "name": "fixed"
+    },
+    {
+      "id": 2,
+      "value": 2,
+      "label": "variable",
+      "name": "variable"
+    }
+  ],
+  "DateTypes": [
+    { "id": 0, "value": 0, "name": "customDate", "label": "customDate" },
+    { "id": 1, "value": 1, "name": "bodDate", "label": "bodDate" }
+  ],
+  "printTypes": [
+    {
+      "label": "Bill",
+      "name": "Bill",
+      "value": "bill",
+      "id": "bill"
+    },
+    {
+      "label": "Report",
+      "name": "Report",
+      "value": "report",
+      "id": "report"
+    },
+    {
+      "label": "Product",
+      "name": "Product",
+      "value": "product",
+      "id": "product"
+    }
+  ],
+  "printerModels": [
+    {
+      "label": "Step-4",
+      "name": "Step-4",
+      "value": "step-4",
+      "id": "step-4"
+    },
+    {
+      "label": "All other",
+      "name": "All other",
+      "value": "all-other",
+      "id": "all-other"
+    }
+  ],
+  "refundId": 2,
+  "shopUserRole": [
+    {
+      "id": "merchant",
+      "value": "merchant",
+      "label": "owner",
+      "name": "owner"
+    },
+    {
+      "id": "manager",
+      "value": "manager",
+      "label": "manager",
+      "name": "manager"
+    },
+    {
+      "id": "casher",
+      "value": "casher",
+      "label": "casher",
+      "name": "casher"
+    },
+    {
+      "id": "warehouse-manager",
+      "value": "warehouse-manager",
+      "label": "warehouseManager",
+      "name": "warehouseManager"
+    }
+  ]
+}
