@@ -33,21 +33,30 @@ interface ModalContentProps extends ComponentProps<
   typeof DialogPrimitive.Content
 > {
   showClose?: boolean;
+  size?: "sm" | "md" | "lg" | "full";
 }
+
+const sizeClasses = {
+  sm: "max-w-sm",
+  md: "max-w-md",
+  lg: "max-w-2xl",
+  full: "w-full h-full max-w-full max-h-full rounded-none border-none p-0 left-0 top-0 translate-x-0 translate-y-0",
+};
 
 const ModalContent = forwardRef<
   ComponentRef<typeof DialogPrimitive.Content>,
   ModalContentProps
->(({ className, children, showClose = true, ...props }, ref) => (
+>(({ className, children, showClose = true, size = "lg", ...props }, ref) => (
   <ModalPortal>
     <ModalOverlay />
     <DialogPrimitive.Content
       ref={ref}
       aria-describedby={undefined}
       className={cn(
-        "dialog-content fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2",
-        "gap-4 border border-border bg-background p-6 shadow-lg rounded-lg",
-        "max-h-[calc(100dvh-2rem)] overflow-y-auto",
+        size === "full" ? "dialog-content-full" : "dialog-content",
+        "origin-center fixed z-50 grid bg-background shadow-lg overflow-y-auto",
+        size !== "full" && "left-1/2 top-1/2 w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 border border-border p-6 rounded-lg max-h-[calc(100dvh-2rem)]",
+        sizeClasses[size],
         className,
       )}
       {...props}>
@@ -79,7 +88,7 @@ function ModalFooter({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "flex flex-col-reverse items-center justify-center gap-2 sm:flex-row",
+        "grid grid-cols-2 gap-2 sm:flex sm:items-center sm:justify-end sm:gap-3 w-full",
         className,
       )}
       {...props}

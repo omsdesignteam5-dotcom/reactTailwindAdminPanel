@@ -107,7 +107,7 @@
 }
 
 @theme inline {
-  --font-sans: "Google Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Strichpunkt Sans", "Google Sans", ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

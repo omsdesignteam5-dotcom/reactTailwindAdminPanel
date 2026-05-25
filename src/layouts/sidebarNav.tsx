@@ -47,9 +47,9 @@ function useIsNavExpanded() {
 
 export function SidebarNav({ groups }: SidebarNavProps) {
   return (
-    <nav className="flex flex-col gap-4 px-2 py-2">
-      {groups.map((group) => (
-        <NavGroup key={group.title} {...group} />
+    <nav className="flex flex-col gap-1 px-2 py-2">
+      {groups.map((group, index) => (
+        <NavGroup key={`${group.title}-${index}`} {...group} />
       ))}
     </nav>
   );
@@ -59,13 +59,13 @@ function NavGroup({ title, items }: NavGroupType) {
   const isOpen = useIsNavExpanded();
 
   return (
-    <div className="flex flex-col gap-0.5">
+    <div className="flex flex-col">
       {isOpen && (
         <span className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-sidebar-foreground/75">
           {title}
         </span>
       )}
-      {!isOpen && <div className="mx-auto mb-1 h-px w-4 bg-border" />}
+      {!isOpen && <div className="mx-auto mb-1 h-px w-4" />}
       {items.map((item) => {
         const key = `${item.title}-${item.url ?? ""}`;
         if (!item.items) {
@@ -95,7 +95,10 @@ function SidebarMenuLink({ item }: { item: NavLinkType }) {
         "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
         "hover:bg-accent hover:text-accent-foreground",
         isActive
-          ? "bg-white/20 text-white font-semibold shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+          ? cn(
+              "bg-white/20 text-white font-semibold",
+              isOpen && "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+            )
           : "text-sidebar-foreground/85",
         !isOpen && "justify-center px-0",
       )}>
@@ -219,7 +222,7 @@ function CollapsedDropdown({ item }: { item: NavCollapsibleType }) {
               "flex w-full items-center justify-center rounded-md py-2 text-sm font-medium transition-colors",
               "hover:bg-accent hover:text-accent-foreground",
               isChildActive
-                ? "bg-white/20 text-white font-semibold shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+                ? "bg-white/20 text-white font-semibold"
                 : "text-sidebar-foreground/85",
             )}>
             {item.icon && <item.icon className="h-4 w-4 shrink-0" />}

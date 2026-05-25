@@ -52,9 +52,15 @@ function App() {
     try {
       const res = await getAllLanguages();
       const siteLanguages = res.data?.data ?? [];
-      setLanguages(siteLanguages);
+      if (siteLanguages.length > 0) {
+        setLanguages(siteLanguages);
+      } else {
+        setLanguages([{ id: 1, name: "English", code: "en" }]);
+      }
     } catch (ex) {
       console.error("Error loading languages data:", ex);
+      // Fallback to default language on network/API error
+      setLanguages([{ id: 1, name: "English", code: "en" }]);
     }
   };
 
