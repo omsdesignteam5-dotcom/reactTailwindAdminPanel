@@ -7,7 +7,7 @@ import {
 } from "react";
 
 //Icons
-import { Upload, X, File as FileIcon } from "lucide-react";
+import { Upload, X, File as FileIcon, Image as ImageIcon, FileText, FileSpreadsheet, FileArchive } from "lucide-react";
 
 //Utils
 import { cn } from "../../../utils/utils";
@@ -24,6 +24,20 @@ interface FileUploadProps {
   disabled?: boolean;
 }
 
+interface FileWithPreview {
+  file: File;
+  previewUrl?: string;
+}
+
+function getFileIcon(file: File) {
+  const type = file.type;
+  if (type.startsWith("image/")) return <ImageIcon className="h-4 w-4" />;
+  if (type === "application/pdf" || type.includes("document")) return <FileText className="h-4 w-4" />;
+  if (type.includes("spreadsheet") || type.includes("csv") || type.includes("excel")) return <FileSpreadsheet className="h-4 w-4" />;
+  if (type.includes("zip") || type.includes("rar") || type.includes("tar") || type.includes("archive")) return <FileArchive className="h-4 w-4" />;
+  return <FileIcon className="h-4 w-4" />;
+}
+
 export function FileUpload({
   accept,
   multiple = false,
@@ -32,7 +46,7 @@ export function FileUpload({
   className,
   disabled = false,
 }: FileUploadProps) {
-  const [files, setFiles] = useState<File[]>([]);
+  const [fileItems, setFileItems] = useState<FileWithPreview[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -57,17 +71,39 @@ export function FileUpload({
     [maxSizeBytes, maxSizeMB],
   );
 
+  const createPreviews = useCallback((files: File[]): FileWithPreview[] => {
+    return files.map((file) => {
+      const item: FileWithPreview = { file };
+      if (file.type.startsWith("image/")) {
+        item.previewUrl = URL.createObjectURL(file);
+      }
+      return item;
+    });
+  }, []);
+
   const handleFiles = useCallback(
     (fileList: FileList | File[]) => {
       setError(null);
       const validFiles = validateFiles(fileList);
-      const newFiles = multiple
-        ? [...files, ...validFiles]
-        : validFiles.slice(0, 1);
-      setFiles(newFiles);
-      onFilesChange?.(newFiles);
+      if (validFiles.length === 0) return;
+
+      const newPreviews = createPreviews(validFiles);
+
+      let updatedItems: FileWithPreview[];
+      if (multiple) {
+        updatedItems = [...fileItems, ...newPreviews];
+      } else {
+        // Single mode: revoke old preview
+        fileItems.forEach((item) => {
+          if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
+        });
+        updatedItems = newPreviews.slice(0, 1);
+      }
+
+      setFileItems(updatedItems);
+      onFilesChange?.(updatedItems.map((item) => item.file));
     },
-    [files, multiple, onFilesChange, validateFiles],
+    [fileItems, multiple, onFilesChange, validateFiles, createPreviews],
   );
 
   const handleDrop = useCallback(
@@ -96,6 +132,7 @@ export function FileUpload({
     (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.files) {
         handleFiles(e.target.files);
+        e.target.value = "";
       }
     },
     [handleFiles],
@@ -103,11 +140,14 @@ export function FileUpload({
 
   const removeFile = useCallback(
     (index: number) => {
-      const newFiles = files.filter((_, i) => i !== index);
-      setFiles(newFiles);
-      onFilesChange?.(newFiles);
+      const removed = fileItems[index];
+      if (removed?.previewUrl) URL.revokeObjectURL(removed.previewUrl);
+
+      const newItems = fileItems.filter((_, i) => i !== index);
+      setFileItems(newItems);
+      onFilesChange?.(newItems.map((item) => item.file));
     },
-    [files, onFilesChange],
+    [fileItems, onFilesChange],
   );
 
   const formatFileSize = (bytes: number): string => {
@@ -115,6 +155,8 @@ export function FileUpload({
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
+
+  const hasFiles = fileItems.length > 0;
 
   return (
     <div className={cn("space-y-3", className)}>
@@ -125,7 +167,8 @@ export function FileUpload({
         onDragLeave={handleDragLeave}
         onClick={() => !disabled && inputRef.current?.click()}
         className={cn(
-          "flex min-h-[150px] cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-6 transition-colors",
+          "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-6 transition-colors",
+          hasFiles ? "min-h-[80px]" : "min-h-[150px]",
           isDragOver
             ? "border-primary bg-primary/5"
             : "border-border hover:border-primary/50 hover:bg-muted/50",
@@ -144,7 +187,9 @@ export function FileUpload({
           <p className="text-sm font-medium text-foreground">
             {isDragOver
               ? "Drop files here"
-              : "Click to upload or drag and drop"}
+              : hasFiles
+                ? "Click to add more files"
+                : "Click to upload or drag and drop"}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
             {accept ? `Accepted: ${accept}` : "Any file type"} · Max {maxSizeMB}
@@ -167,27 +212,40 @@ export function FileUpload({
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       {/* File List */}
-      {files.length > 0 && (
+      {hasFiles && (
         <div className="space-y-2">
-          {files.map((file, index) => (
+          {fileItems.map((item, index) => (
             <div
-              key={`${file.name}-${index}`}
-              className="flex items-center gap-3 rounded-md border border-border bg-card p-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded bg-muted text-muted-foreground">
-                <FileIcon className="h-4 w-4" />
-              </div>
+              key={`${item.file.name}-${index}`}
+              className="flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-muted/30">
+              {/* File icon or image preview */}
+              {item.previewUrl ? (
+                <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md border border-border">
+                  <img
+                    src={item.previewUrl}
+                    alt={item.file.name}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                  {getFileIcon(item.file)}
+                </div>
+              )}
+              {/* File info */}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-foreground">
-                  {file.name}
+                  {item.file.name}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {formatFileSize(file.size)}
+                  {formatFileSize(item.file.size)}
                 </p>
               </div>
+              {/* Remove button */}
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 shrink-0"
+                className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive"
                 onClick={(e) => {
                   e.stopPropagation();
                   removeFile(index);

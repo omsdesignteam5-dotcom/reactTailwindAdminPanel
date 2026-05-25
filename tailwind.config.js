@@ -55,6 +55,9 @@ module.exports = {
         lg: "var(--radius)",
         xl: "calc(var(--radius) + 4px)",
       },
+      fontFamily: {
+        sans: ["Strichpunkt Sans", "Google Sans", "ui-sans-serif", "system-ui", "sans-serif"],
+      },
     },
   },
   plugins: [],

@@ -1,5 +1,5 @@
 //icons
-import { LayoutDashboard, Settings } from "lucide-react";
+import { LayoutDashboard, Settings, Users } from "lucide-react";
 
 //components
 import type { SidebarData } from "./sidebarTypes";
@@ -14,20 +14,27 @@ export const adminNav: SidebarData = {
       icon: LayoutDashboard,
     },
     {
-      component: "group",
+      component: "item",
+      title: "Sample Users",
+      name: "sampleUsers",
+      url: "/sample-users",
+      icon: Users,
+    },
+    {
+      component: "item",
       title: "Settings",
       name: "settings",
-      route: "/setting",
+      url: "/setting",
       icon: Settings,
-      _children: [
-        {
-          component: "item",
-          title: "School Settings",
-          name: "schoolSettings",
-          url: "/setting",
-          icon: Settings,
-        },
-      ],
+      // _children: [
+      //   {
+      //     component: "item",
+      //     title: "School Settings",
+      //     name: "schoolSettings",
+      //     url: "/setting",
+      //     icon: Settings,
+      //   },
+      // ],
     },
   ],
 };

@@ -52,15 +52,12 @@ export function SelectWithInput({
 
   return (
     <div className={cn("space-y-2", className)}>
-      <div className="relative">
-        <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={searchPlaceholder}
-          className="pl-8"
-        />
-      </div>
+      <Input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder={searchPlaceholder}
+        leftIcon={<Search className="h-4 w-4" />}
+      />
 
       <Select value={value} onValueChange={onValueChange}>
         <SelectTrigger>
