@@ -2,7 +2,7 @@ import * as SeparatorPrimitive from "@radix-ui/react-separator";
 import { forwardRef, type ComponentProps, type ComponentRef } from "react";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 const Separator = forwardRef<
   ComponentRef<typeof SeparatorPrimitive.Root>,

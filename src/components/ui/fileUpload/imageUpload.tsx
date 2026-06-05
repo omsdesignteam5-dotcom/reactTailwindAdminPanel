@@ -16,15 +16,15 @@ import ReactCrop, {
 import "react-image-crop/dist/ReactCrop.css";
 import { Upload, Plus, X, Trash2 } from "lucide-react";
 
-import { Button } from "../button/button";
+import { Button } from "src/components/ui/button/button";
 import {
   Modal,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalTitle,
-} from "../modal/modal";
-import { cn } from "../../../utils/utils";
+} from "src/components/ui/modal/modal";
+import { cn } from "src/utils/utils";
 
 interface CroppedImage {
   file: File;
@@ -271,7 +271,14 @@ export function ImageCrop({
 
     setModalOpen(false);
     setPendingImageSrc(null);
-  }, [completedCrop, imgEl, multiple, croppedImages, onCroppedImage, onImagesChange]);
+  }, [
+    completedCrop,
+    imgEl,
+    multiple,
+    croppedImages,
+    onCroppedImage,
+    onImagesChange,
+  ]);
 
   const removeImage = useCallback(
     (index: number) => {
@@ -296,23 +303,19 @@ export function ImageCrop({
           openPicker();
         }
       }}
-      className="flex min-h-[150px] cursor-pointer flex-col items-center justify-center gap-3"
-    >
+      className="flex min-h-[150px] cursor-pointer flex-col items-center justify-center gap-3">
       <div
         className={cn(
           "flex h-10 w-10 items-center justify-center rounded-full",
           isDragOver
             ? "bg-primary/10 text-primary"
             : "bg-muted text-muted-foreground",
-        )}
-      >
+        )}>
         <Upload className="h-5 w-5" />
       </div>
       <div className="text-center">
         <p className="text-sm font-medium text-foreground">
-          {isDragOver
-            ? "Drop image here"
-            : "Click to upload or drag and drop"}
+          {isDragOver ? "Drop image here" : "Click to upload or drag and drop"}
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
           JPG, PNG · Max {maxSizeMB}MB
@@ -335,8 +338,7 @@ export function ImageCrop({
         )}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-      >
+        onDragLeave={handleDragLeave}>
         {multiple ? (
           /* ═══ MULTIPLE MODE ═══ */
           hasImages ? (
@@ -345,8 +347,7 @@ export function ImageCrop({
               {croppedImages.map((img, index) => (
                 <div
                   key={`img-${index}`}
-                  className="relative h-28 w-28 shrink-0 overflow-hidden rounded-lg border border-border bg-muted/30 shadow-sm"
-                >
+                  className="relative h-28 w-28 shrink-0 overflow-hidden rounded-lg border border-border bg-muted/30 shadow-sm">
                   <img
                     src={img.previewUrl}
                     alt={`Uploaded ${index + 1}`}
@@ -360,8 +361,7 @@ export function ImageCrop({
                       removeImage(index);
                     }}
                     className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-destructive"
-                    title="Remove image"
-                  >
+                    title="Remove image">
                     <Trash2 className="h-3 w-3" />
                   </button>
                 </div>
@@ -374,8 +374,7 @@ export function ImageCrop({
                 className={cn(
                   "flex h-28 w-28 shrink-0 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed transition-colors",
                   "border-border/60 bg-muted/20 text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-primary",
-                )}
-              >
+                )}>
                 <Plus className="h-6 w-6" />
                 <span className="text-[10px] font-medium">Add Photo</span>
               </button>
@@ -383,41 +382,37 @@ export function ImageCrop({
           ) : (
             emptyDropZone
           )
+        ) : /* ═══ SINGLE MODE ═══ */
+        hasImages ? (
+          <div className="relative">
+            {/* Uploaded image fills the area */}
+            <img
+              src={croppedImages[0].previewUrl}
+              alt="Uploaded"
+              className="w-full max-h-64 object-contain bg-muted/20"
+            />
+            {/* Delete button — always visible top-right */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                removeImage(0);
+              }}
+              className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-destructive"
+              title="Remove image">
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+            {/* Re-upload overlay at bottom */}
+            <button
+              type="button"
+              onClick={openPicker}
+              className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 bg-black/40 py-2 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/60">
+              <Upload className="h-3.5 w-3.5" />
+              Change Photo
+            </button>
+          </div>
         ) : (
-          /* ═══ SINGLE MODE ═══ */
-          hasImages ? (
-            <div className="relative">
-              {/* Uploaded image fills the area */}
-              <img
-                src={croppedImages[0].previewUrl}
-                alt="Uploaded"
-                className="w-full max-h-64 object-contain bg-muted/20"
-              />
-              {/* Delete button — always visible top-right */}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeImage(0);
-                }}
-                className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-destructive"
-                title="Remove image"
-              >
-                <Trash2 className="h-3.5 w-3.5" />
-              </button>
-              {/* Re-upload overlay at bottom */}
-              <button
-                type="button"
-                onClick={openPicker}
-                className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 bg-black/40 py-2 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/60"
-              >
-                <Upload className="h-3.5 w-3.5" />
-                Change Photo
-              </button>
-            </div>
-          ) : (
-            emptyDropZone
-          )
+          emptyDropZone
         )}
       </div>
 
@@ -437,24 +432,21 @@ export function ImageCrop({
           className="max-w-2xl"
           showClose={false}
           onPointerDownOutside={(e) => e.preventDefault()}
-          onInteractOutside={(e) => e.preventDefault()}
-        >
+          onInteractOutside={(e) => e.preventDefault()}>
           <ModalHeader>
             <ModalTitle>Crop Image</ModalTitle>
           </ModalHeader>
 
           <div
             className="overflow-hidden rounded-md border border-border bg-muted/10 select-none"
-            style={{ touchAction: "none" }}
-          >
+            style={{ touchAction: "none" }}>
             {pendingImageSrc ? (
               <ReactCrop
                 crop={crop}
                 onChange={(_, percentCrop) => setCrop(percentCrop)}
                 onComplete={(c) => setCompletedCrop(c)}
                 aspect={aspect}
-                keepSelection
-              >
+                keepSelection>
                 <img
                   src={pendingImageSrc}
                   alt="Crop source"
@@ -474,8 +466,7 @@ export function ImageCrop({
               variant="default"
               type="button"
               onClick={onConfirmCrop}
-              disabled={!completedCrop}
-            >
+              disabled={!completedCrop}>
               Crop & Save
             </Button>
           </ModalFooter>

@@ -10,7 +10,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
 //utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 const Sheet = DialogPrimitive.Root;
 const SheetTrigger = DialogPrimitive.Trigger;

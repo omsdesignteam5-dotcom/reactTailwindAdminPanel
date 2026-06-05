@@ -14,7 +14,7 @@ export interface NavLink extends BaseNavItem {
 
 export interface NavCollapsible extends BaseNavItem {
   items: (BaseNavItem & { url: string })[];
-  url?: never;
+  url?: string;
 }
 
 export type NavItem = NavCollapsible | NavLink;
@@ -28,15 +28,13 @@ export interface NavEntryItem extends BaseNavItem {
   component: "item";
   url: string;
   state?: unknown;
-  route?: never;
   _children?: never;
 }
 
 export interface NavEntryGroup extends BaseNavItem {
   component: "group";
-  route: string;
+  url?: string;
   _children: NavEntryItem[];
-  url?: never;
   state?: never;
 }
 

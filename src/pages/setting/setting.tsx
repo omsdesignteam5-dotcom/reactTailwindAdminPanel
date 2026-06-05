@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ImageCrop } from "../../components/ui/fileUpload/imageUpload";
-import { FileUpload } from "../../components/ui/fileUpload/fileUpload";
+import { ImageCrop } from "src/components/ui/fileUpload/imageUpload";
+import { FileUpload } from "src/components/ui/fileUpload/fileUpload";
 
 export default function Setting() {
   const [singlePreview, setSinglePreview] = useState<string>("");
@@ -12,7 +12,8 @@ export default function Setting() {
         <div>
           <h2 className="text-lg font-semibold">Single Image Upload</h2>
           <p className="text-sm text-muted-foreground">
-            Upload one image at a time. Replaces the current image when a new one is selected.
+            Upload one image at a time. Replaces the current image when a new
+            one is selected.
           </p>
         </div>
         <ImageCrop
@@ -29,7 +30,8 @@ export default function Setting() {
         <div>
           <h2 className="text-lg font-semibold">Multiple Image Upload</h2>
           <p className="text-sm text-muted-foreground">
-            Upload multiple images. Each image is cropped individually and displayed as thumbnails.
+            Upload multiple images. Each image is cropped individually and
+            displayed as thumbnails.
           </p>
         </div>
         <ImageCrop
@@ -47,7 +49,8 @@ export default function Setting() {
         <div>
           <h2 className="text-lg font-semibold">File Upload</h2>
           <p className="text-sm text-muted-foreground">
-            Upload documents and files. Supports drag-and-drop with file size validation.
+            Upload documents and files. Supports drag-and-drop with file size
+            validation.
           </p>
         </div>
         <FileUpload

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { WifiOff, RefreshCcw } from "lucide-react";
 
 //Components
-import { Button } from "./button/button";
+import { Button } from "src/components/ui/button/button";
 
 export function NetworkStatus() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);

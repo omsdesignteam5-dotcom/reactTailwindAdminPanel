@@ -5,7 +5,7 @@ import { forwardRef, type ComponentProps, type ComponentRef } from "react";
 import { Circle } from "lucide-react";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 const RadioGroup = forwardRef<
   ComponentRef<typeof RadioGroupPrimitive.Root>,

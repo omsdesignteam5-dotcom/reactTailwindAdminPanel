@@ -1,20 +1,29 @@
-//Icons
+import { useContext } from "react";
+
+// Icons
 import { Command } from "lucide-react";
 
-//Utils
-import { cn } from "../utils/utils";
+// Utils
+import { cn } from "src/utils/utils";
 
-//Components
-import { SidebarNav } from "./sidebarNav";
-import { ScrollArea } from "../components/ui/scrollArea/scrollArea";
-import { Sheet, SheetContent, SheetTitle } from "../components/ui/sheet/sheet";
+// Components
+import { SidebarNav } from "src/layouts/sidebarNav";
+import { ScrollArea } from "src/components/ui/scrollArea/scrollArea";
+import { Sheet, SheetContent, SheetTitle } from "src/components/ui/sheet/sheet";
 
-//Context
-import { useSidebar, type SidebarTheme } from "../context/sidebarContext";
+// Context
+import CommonContext from "src/context/commonContext";
+import { useSidebar, type SidebarTheme } from "src/context/sidebarContext";
 
-//Nav Data
-import { adminNav } from "./_adminNav";
-import type { NavEntryItem, NavGroup, NavItem } from "./sidebarTypes";
+// Nav Data
+import { adminNav } from "src/layouts/_adminNav";
+import type {
+  NavCollapsible,
+  NavEntryItem,
+  NavGroup,
+  NavItem,
+  NavLink,
+} from "src/layouts/sidebarTypes";
 
 export const SIDEBAR_THEME_CLASSES: Record<SidebarTheme, string> = {
   default:
@@ -43,47 +52,76 @@ const isNavEntryItem = (entry: unknown): entry is NavEntryItem => {
 
 export function Sidebar() {
   const { layout, isOpen, isMobile, setOpen, sidebarTheme } = useSidebar();
+  const { languageData } = useContext(CommonContext);
 
-  const navItemsAsGroups: NavGroup[] = (adminNav.navItems ?? []).flatMap(
-    (entry) => {
-      if (entry.component === "item") {
-        return [
-          {
-            title: "",
-            items: [
-              {
-                title: entry.title ?? entry.name ?? "",
-                url: entry.url,
-                icon: entry.icon,
-                badge: entry.badge,
-              },
-            ],
-          },
-        ];
+  const navItemsAsGroups: NavGroup[] = (adminNav.navItems ?? []).map(
+    (entry): NavGroup => {
+      if (isNavEntryItem(entry)) {
+        return {
+          title: "",
+          items: [
+            {
+              title: languageData[entry.name ?? ""],
+              name: entry.name,
+              url: entry.url,
+              icon: entry.icon,
+              badge: entry.badge,
+            },
+          ],
+        };
       }
 
-      const children: NavItem[] = (entry._children ?? [])
-        .filter(isNavEntryItem)
-        .map((child) => ({
-          title: child.title ?? child.name ?? "",
-          url: child.url,
-          icon: child.icon,
-          badge: child.badge,
-        }));
+      const children: NavLink[] = (entry._children ?? []).map((child) => ({
+        title: languageData[child.name ?? ""] ?? child.name ?? "",
+        name: child.name,
+        url: child.url,
+        icon: child.icon,
+        badge: child.badge,
+      }));
 
-      return [
-        {
-          title: entry.title ?? entry.name ?? "",
-          items: children,
-        },
-      ];
+      const groupItem: NavCollapsible = {
+        title: languageData[entry.name ?? ""],
+        name: entry.name,
+        url: entry.url,
+        icon: entry.icon,
+        badge: entry.badge,
+        items: children,
+      };
+
+      return {
+        title: "",
+        items: [groupItem],
+      };
     },
   );
 
   const groups: NavGroup[] = [
-    ...(adminNav.navLinks ? [{ title: "", items: adminNav.navLinks }] : []),
-    ...(adminNav.navGroups ?? []),
-    ...navItemsAsGroups,
+    ...(adminNav.navLinks
+      ? [
+          {
+            title: "",
+            items: adminNav.navLinks.map((item) =>
+              "items" in item && item.items
+                ? {
+                    ...item,
+                    title: languageData[item.name ?? ""],
+                    items: item.items.map((sub) => ({
+                      ...sub,
+                      title: languageData[sub.name ?? ""],
+                    })),
+                  }
+                : {
+                    ...item,
+                    title: languageData[item.name ?? ""],
+                  },
+            ),
+          },
+        ]
+      : []),
+    ...navItemsAsGroups.map((group) => ({
+      ...group,
+      title: "",
+    })),
   ];
 
   if (isMobile || layout === "full") {

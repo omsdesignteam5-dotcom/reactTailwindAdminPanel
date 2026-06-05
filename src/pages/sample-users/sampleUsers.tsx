@@ -1,35 +1,66 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { 
-  Users, 
-  Search, 
-  UserPlus, 
-  Edit2, 
-  Trash2, 
-  Filter, 
-  RefreshCw, 
-  Shield, 
-  UserCheck, 
-  UserX, 
-  Mail, 
-  Calendar, 
-  Check, 
+import {
+  Users,
+  Search,
+  UserPlus,
+  Edit2,
+  Trash2,
+  Filter,
+  RefreshCw,
+  Shield,
+  UserCheck,
+  UserX,
+  Mail,
+  Calendar,
+  Check,
   X,
   Plus,
   CreditCard,
   MapPin,
   FileText,
-  UserCircle2
+  UserCircle2,
 } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../../components/ui/card/card";
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../../components/ui/table/table";
-import { Badge } from "../../components/ui/badge/badge";
-import { Avatar, AvatarImage, AvatarFallback } from "../../components/ui/avatar/avatar";
-import { Input } from "../../components/ui/input/input";
-import { Button } from "../../components/ui/button/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select/select";
-import { Modal, ModalContent, ModalHeader, ModalFooter, ModalTitle, ModalDescription } from "../../components/ui/modal/modal";
-import { ConfirmDialog } from "../../components/ui/dialog/confirmDialog";
-import { ImageCrop } from "../../components/ui/fileUpload/imageUpload";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "src/components/ui/card/card";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "src/components/ui/table/table";
+import { Badge } from "src/components/ui/badge/badge";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "src/components/ui/avatar/avatar";
+import { Input } from "src/components/ui/input/input";
+import { Button } from "src/components/ui/button/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "src/components/ui/select/select";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalTitle,
+  ModalDescription,
+} from "src/components/ui/modal/modal";
+import { ConfirmDialog } from "src/components/ui/dialog/confirmDialog";
+import { ImageCrop } from "src/components/ui/fileUpload/imageUpload";
 
 interface User {
   id: string;
@@ -237,7 +268,7 @@ export default function SampleUsers() {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, roleFilter, statusFilter]);
-  
+
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
@@ -271,13 +302,18 @@ export default function SampleUsers() {
 
   const [detailDocType, setDetailDocType] = useState("Passport");
   const [detailDocId, setDetailDocId] = useState("US-P8829910");
-  const [detailIssuingAuth, setDetailIssuingAuth] = useState("US Department of State");
+  const [detailIssuingAuth, setDetailIssuingAuth] = useState(
+    "US Department of State",
+  );
   const [detailIssueDate, setDetailIssueDate] = useState("2020-05-15");
   const [detailExpiryDate, setDetailExpiryDate] = useState("2030-05-14");
 
   const [detailBankName, setDetailBankName] = useState("Chase Bank N.A.");
-  const [detailCardholderName, setDetailCardholderName] = useState("SARAH JENKINS");
-  const [detailCardNumber, setDetailCardNumber] = useState("4111 2222 3333 4444");
+  const [detailCardholderName, setDetailCardholderName] =
+    useState("SARAH JENKINS");
+  const [detailCardNumber, setDetailCardNumber] = useState(
+    "4111 2222 3333 4444",
+  );
   const [detailCardExpiry, setDetailCardExpiry] = useState("08/29");
   const [detailCardCvv, setDetailCardCvv] = useState("382");
 
@@ -287,13 +323,14 @@ export default function SampleUsers() {
 
   // Filtered Users
   const filteredUsers = useMemo(() => {
-    return users.filter(user => {
-      const matchesSearch = 
+    return users.filter((user) => {
+      const matchesSearch =
         user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email.toLowerCase().includes(searchQuery.toLowerCase());
-      
+
       const matchesRole = roleFilter === "all" || user.role === roleFilter;
-      const matchesStatus = statusFilter === "all" || user.status === statusFilter;
+      const matchesStatus =
+        statusFilter === "all" || user.status === statusFilter;
 
       return matchesSearch && matchesRole && matchesStatus;
     });
@@ -346,9 +383,15 @@ export default function SampleUsers() {
       setUsers(
         users.map((u) =>
           u.id === editingUser.id
-            ? { ...u, name: formName, email: formEmail, role: formRole, status: formStatus }
-            : u
-        )
+            ? {
+                ...u,
+                name: formName,
+                email: formEmail,
+                role: formRole,
+                status: formStatus,
+              }
+            : u,
+        ),
       );
     }
 
@@ -380,19 +423,27 @@ export default function SampleUsers() {
 
   const getRoleBadgeVariant = (role: User["role"]) => {
     switch (role) {
-      case "superadmin": return "destructive"; // Red/destructve
-      case "admin": return "default"; // Primary
-      case "manager": return "info"; // Blue
-      case "staff": return "warning"; // Amber
-      default: return "secondary"; // Gray
+      case "superadmin":
+        return "destructive"; // Red/destructve
+      case "admin":
+        return "default"; // Primary
+      case "manager":
+        return "info"; // Blue
+      case "staff":
+        return "warning"; // Amber
+      default:
+        return "secondary"; // Gray
     }
   };
 
   const getStatusBadgeVariant = (status: User["status"]) => {
     switch (status) {
-      case "active": return "success";
-      case "suspended": return "destructive";
-      default: return "secondary";
+      case "active":
+        return "success";
+      case "suspended":
+        return "destructive";
+      default:
+        return "secondary";
     }
   };
 
@@ -401,23 +452,22 @@ export default function SampleUsers() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Sample Users</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            Sample Users
+          </h1>
           <p className="text-sm text-muted-foreground">
-            Manage your user directory, assign access levels, and audit status accounts.
+            Manage your user directory, assign access levels, and audit status
+            accounts.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
-          <Button 
+          <Button
             onClick={() => setIsFullModalOpen(true)}
             variant="outline"
-            size="lg"
-          >
+            size="lg">
             <UserPlus className="h-4 w-4" /> Add Detailed Profile
           </Button>
-          <Button 
-            onClick={handleOpenAddModal} 
-            size="lg"
-          >
+          <Button onClick={handleOpenAddModal} size="lg">
             <UserPlus className="h-4 w-4" /> Add New User
           </Button>
         </div>
@@ -471,12 +521,10 @@ export default function SampleUsers() {
               </Select>
 
               {/* Reset Button */}
-              {(searchQuery || roleFilter !== "all" || statusFilter !== "all") && (
-                <Button 
-                  onClick={handleResetFilters} 
-                  variant="ghost" 
-                  size="sm" 
-                >
+              {(searchQuery ||
+                roleFilter !== "all" ||
+                statusFilter !== "all") && (
+                <Button onClick={handleResetFilters} variant="ghost" size="sm">
                   <RefreshCw className="h-3 w-3" /> Reset
                 </Button>
               )}
@@ -488,22 +536,39 @@ export default function SampleUsers() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/10 hover:bg-transparent">
-                  <TableHead className="font-semibold text-foreground/80 py-3.5">User Info</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 py-3.5">Access Level</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 py-3.5">Status</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 py-3.5 hidden md:table-cell">Joined Date</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 py-3.5 hidden sm:table-cell">Last Active</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 py-3.5 text-right pr-6">Actions</TableHead>
+                  <TableHead className="font-semibold text-foreground/80 py-3.5">
+                    User Info
+                  </TableHead>
+                  <TableHead className="font-semibold text-foreground/80 py-3.5">
+                    Access Level
+                  </TableHead>
+                  <TableHead className="font-semibold text-foreground/80 py-3.5">
+                    Status
+                  </TableHead>
+                  <TableHead className="font-semibold text-foreground/80 py-3.5 hidden md:table-cell">
+                    Joined Date
+                  </TableHead>
+                  <TableHead className="font-semibold text-foreground/80 py-3.5 hidden sm:table-cell">
+                    Last Active
+                  </TableHead>
+                  <TableHead className="font-semibold text-foreground/80 py-3.5 text-right pr-6">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paginatedUsers.length > 0 ? (
                   paginatedUsers.map((user) => {
-                    const initials = user.name.split(" ").map(n => n[0]).join("").toUpperCase();
+                    const initials = user.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase();
 
                     return (
-                      <TableRow key={user.id} className="hover:bg-muted/10 transition-colors">
-                        
+                      <TableRow
+                        key={user.id}
+                        className="hover:bg-muted/10 transition-colors">
                         {/* User Identity cell */}
                         <TableCell className="py-3">
                           <div className="flex items-center gap-3">
@@ -513,8 +578,12 @@ export default function SampleUsers() {
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col min-w-0">
-                              <span className="font-medium text-foreground text-sm truncate">{user.name}</span>
-                              <span className="text-xs text-muted-foreground truncate">{user.email}</span>
+                              <span className="font-medium text-foreground text-sm truncate">
+                                {user.name}
+                              </span>
+                              <span className="text-xs text-muted-foreground truncate">
+                                {user.email}
+                              </span>
                             </div>
                           </div>
                         </TableCell>
@@ -550,35 +619,38 @@ export default function SampleUsers() {
                         {/* Actions cell */}
                         <TableCell className="py-3 text-right pr-6">
                           <div className="flex items-center justify-end gap-1.5">
-                            <Button 
-                              onClick={() => handleOpenEditModal(user)} 
-                              variant="ghost" 
-                              size="icon" 
-                              title="Edit user profile"
-                            >
+                            <Button
+                              onClick={() => handleOpenEditModal(user)}
+                              variant="ghost"
+                              size="icon"
+                              title="Edit user profile">
                               <Edit2 className="h-3.5 w-3.5" />
                             </Button>
-                            <Button 
-                              onClick={() => handleOpenDeleteDialog(user)} 
-                              variant="ghost" 
-                              size="icon" 
-                              title="Delete user profile"
-                            >
+                            <Button
+                              onClick={() => handleOpenDeleteDialog(user)}
+                              variant="ghost"
+                              size="icon"
+                              title="Delete user profile">
                               <Trash2 className="h-3.5 w-3.5" />
                             </Button>
                           </div>
                         </TableCell>
-
                       </TableRow>
                     );
                   })
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="h-32 text-center text-muted-foreground text-sm">
+                    <TableCell
+                      colSpan={6}
+                      className="h-32 text-center text-muted-foreground text-sm">
                       <div className="flex flex-col items-center justify-center gap-1.5 py-8">
                         <Users className="h-8 w-8 opacity-30 text-muted-foreground mb-1" />
-                        <span className="font-semibold text-foreground">No accounts found</span>
-                        <span className="text-xs">Try adjusting your filters or search query</span>
+                        <span className="font-semibold text-foreground">
+                          No accounts found
+                        </span>
+                        <span className="text-xs">
+                          Try adjusting your filters or search query
+                        </span>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -590,44 +662,67 @@ export default function SampleUsers() {
         {filteredUsers.length > 0 && (
           <CardFooter className="flex items-center justify-between border-t border-border/40 py-3.5 px-6 flex-wrap gap-4">
             <span className="text-xs text-muted-foreground">
-              Showing <span className="font-semibold text-foreground">{Math.min(filteredUsers.length, (currentPage - 1) * ITEMS_PER_PAGE + 1)}-{Math.min(filteredUsers.length, currentPage * ITEMS_PER_PAGE)}</span> of{" "}
-              <span className="font-semibold text-foreground">{filteredUsers.length}</span> accounts
+              Showing{" "}
+              <span className="font-semibold text-foreground">
+                {Math.min(
+                  filteredUsers.length,
+                  (currentPage - 1) * ITEMS_PER_PAGE + 1,
+                )}
+                -{Math.min(filteredUsers.length, currentPage * ITEMS_PER_PAGE)}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-foreground">
+                {filteredUsers.length}
+              </span>{" "}
+              accounts
             </span>
             <div className="flex items-center gap-1.5 ml-auto">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-              >
+                disabled={currentPage === 1}>
                 Previous
               </Button>
               <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                  if (totalPages > 5 && Math.abs(page - currentPage) > 1 && page !== 1 && page !== totalPages) {
-                    if (page === 2 || page === totalPages - 1) {
-                      return <span key={page} className="text-muted-foreground px-1 text-xs">...</span>;
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => {
+                    if (
+                      totalPages > 5 &&
+                      Math.abs(page - currentPage) > 1 &&
+                      page !== 1 &&
+                      page !== totalPages
+                    ) {
+                      if (page === 2 || page === totalPages - 1) {
+                        return (
+                          <span
+                            key={page}
+                            className="text-muted-foreground px-1 text-xs">
+                            ...
+                          </span>
+                        );
+                      }
+                      return null;
                     }
-                    return null;
-                  }
-                  return (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setCurrentPage(page)}
-                    >
-                      {page}
-                    </Button>
-                  );
-                })}
+                    return (
+                      <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(page)}>
+                        {page}
+                      </Button>
+                    );
+                  },
+                )}
               </div>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-              >
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
+                disabled={currentPage === totalPages}>
                 Next
               </Button>
             </div>
@@ -650,7 +745,9 @@ export default function SampleUsers() {
           </ModalHeader>
           <form onSubmit={handleFormSubmit} className="space-y-4 py-2">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground/80">Full Name</label>
+              <label className="text-xs font-medium text-foreground/80">
+                Full Name
+              </label>
               <Input
                 placeholder="e.g. John Doe"
                 value={formName}
@@ -659,7 +756,9 @@ export default function SampleUsers() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground/80">Email Address</label>
+              <label className="text-xs font-medium text-foreground/80">
+                Email Address
+              </label>
               <Input
                 type="email"
                 placeholder="e.g. john.doe@company.com"
@@ -669,8 +768,12 @@ export default function SampleUsers() {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground/80">Role Authority</label>
-              <Select value={formRole} onValueChange={(val) => setFormRole(val as User["role"])}>
+              <label className="text-xs font-medium text-foreground/80">
+                Role Authority
+              </label>
+              <Select
+                value={formRole}
+                onValueChange={(val) => setFormRole(val as User["role"])}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
@@ -684,8 +787,12 @@ export default function SampleUsers() {
               </Select>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-foreground/80">Status Code</label>
-              <Select value={formStatus} onValueChange={(val) => setFormStatus(val as User["status"])}>
+              <label className="text-xs font-medium text-foreground/80">
+                Status Code
+              </label>
+              <Select
+                value={formStatus}
+                onValueChange={(val) => setFormStatus(val as User["status"])}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
@@ -697,7 +804,10 @@ export default function SampleUsers() {
               </Select>
             </div>
             <ModalFooter className="pt-4">
-              <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsModalOpen(false)}>
                 Cancel
               </Button>
               <Button type="submit">
@@ -721,7 +831,11 @@ export default function SampleUsers() {
         title="Delete User Profile"
         description={
           <>
-            Are you sure you want to delete <span className="font-semibold text-foreground">{userToDelete?.name}</span>? This action cannot be undone.
+            Are you sure you want to delete{" "}
+            <span className="font-semibold text-foreground">
+              {userToDelete?.name}
+            </span>
+            ? This action cannot be undone.
           </>
         }
         confirmText="Delete Profile"
@@ -737,7 +851,9 @@ export default function SampleUsers() {
             <ModalHeader className="flex-shrink-0 border-b border-border/40 pb-4 mb-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <ModalTitle className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Detailed User Registration</ModalTitle>
+                  <ModalTitle className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                    Detailed User Registration
+                  </ModalTitle>
                   {/* <ModalDescription className="text-sm text-muted-foreground mt-1.5">
                     Configure comprehensive identity credentials, bank payment profiles, and physical address details in a full-width form view.
                   </ModalDescription> */}
@@ -765,7 +881,9 @@ export default function SampleUsers() {
                       <ImageCrop
                         aspect={1}
                         maxSizeMB={5}
-                        onCroppedImage={(file, previewUrl) => console.log("Profile image:", file, previewUrl)}
+                        onCroppedImage={(file, previewUrl) =>
+                          console.log("Profile image:", file, previewUrl)
+                        }
                       />
                     </CardContent>
                   </Card>
@@ -782,14 +900,20 @@ export default function SampleUsers() {
                     </CardHeader>
                     <CardContent className="p-5 space-y-4">
                       <div className="space-y-1.5">
-                        <label className="text-xs font-medium text-foreground/80">Security Level Clearance</label>
-                        <Select value={detailSecurityLevel} onValueChange={setDetailSecurityLevel}>
+                        <label className="text-xs font-medium text-foreground/80">
+                          Security Level Clearance
+                        </label>
+                        <Select
+                          value={detailSecurityLevel}
+                          onValueChange={setDetailSecurityLevel}>
                           <SelectTrigger>
                             <SelectValue placeholder="Clearance Level" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="low">Low Clearance</SelectItem>
-                            <SelectItem value="medium">Medium Clearance</SelectItem>
+                            <SelectItem value="medium">
+                              Medium Clearance
+                            </SelectItem>
                             <SelectItem value="high">High Clearance</SelectItem>
                           </SelectContent>
                         </Select>
@@ -797,26 +921,38 @@ export default function SampleUsers() {
 
                       <div className="flex items-center justify-between p-3 rounded-lg border border-border/40 bg-muted/20">
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-xs font-medium text-foreground">Enforce Two-Factor (2FA)</span>
-                          <span className="text-[10px] text-muted-foreground">Requires Authenticator app login</span>
+                          <span className="text-xs font-medium text-foreground">
+                            Enforce Two-Factor (2FA)
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            Requires Authenticator app login
+                          </span>
                         </div>
                         <input
                           type="checkbox"
                           checked={detailRequire2FA}
-                          onChange={(e) => setDetailRequire2FA(e.target.checked)}
+                          onChange={(e) =>
+                            setDetailRequire2FA(e.target.checked)
+                          }
                           className="h-4 w-4 rounded border-input text-primary focus:ring-primary cursor-pointer"
                         />
                       </div>
 
                       <div className="flex items-center justify-between p-3 rounded-lg border border-border/40 bg-muted/20">
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-xs font-medium text-foreground">System Communications</span>
-                          <span className="text-[10px] text-muted-foreground">Subscribe to newsletters & logs</span>
+                          <span className="text-xs font-medium text-foreground">
+                            System Communications
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            Subscribe to newsletters & logs
+                          </span>
                         </div>
                         <input
                           type="checkbox"
                           checked={detailReceiveNews}
-                          onChange={(e) => setDetailReceiveNews(e.target.checked)}
+                          onChange={(e) =>
+                            setDetailReceiveNews(e.target.checked)
+                          }
                           className="h-4 w-4 rounded border-input text-primary focus:ring-primary cursor-pointer"
                         />
                       </div>
@@ -826,7 +962,6 @@ export default function SampleUsers() {
 
                 {/* Right & Center Column: Detailed Information */}
                 <div className="lg:col-span-2 space-y-6">
-                  
                   {/* Card 1: Personal & Contact Details */}
                   <Card className="border-border/60 bg-card/60 backdrop-blur-xs">
                     <CardHeader className="p-5 border-b border-border/40">
@@ -841,32 +976,44 @@ export default function SampleUsers() {
                       {/* Row 1: First Name, Last Name, Gender (3 Columns) */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">First Name</label>
-                          <Input 
-                            value={detailFirstName} 
-                            onChange={(e) => setDetailFirstName(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            First Name
+                          </label>
+                          <Input
+                            value={detailFirstName}
+                            onChange={(e) => setDetailFirstName(e.target.value)}
                             placeholder="Sarah"
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Last Name</label>
-                          <Input 
-                            value={detailLastName} 
-                            onChange={(e) => setDetailLastName(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Last Name
+                          </label>
+                          <Input
+                            value={detailLastName}
+                            onChange={(e) => setDetailLastName(e.target.value)}
                             placeholder="Jenkins"
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Gender Selection</label>
-                          <Select value={detailGender} onValueChange={setDetailGender}>
+                          <label className="text-xs font-medium text-foreground/80">
+                            Gender Selection
+                          </label>
+                          <Select
+                            value={detailGender}
+                            onValueChange={setDetailGender}>
                             <SelectTrigger>
                               <SelectValue placeholder="Select gender" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="male">Male</SelectItem>
                               <SelectItem value="female">Female</SelectItem>
-                              <SelectItem value="non-binary">Non-Binary</SelectItem>
-                              <SelectItem value="prefer-not-to-say">Prefer Not To Say</SelectItem>
+                              <SelectItem value="non-binary">
+                                Non-Binary
+                              </SelectItem>
+                              <SelectItem value="prefer-not-to-say">
+                                Prefer Not To Say
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -875,30 +1022,36 @@ export default function SampleUsers() {
                       {/* Row 2: Email, Phone, DOB (3 Columns) */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Email Address</label>
-                          <Input 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Email Address
+                          </label>
+                          <Input
                             type="email"
-                            value={detailEmail} 
-                            onChange={(e) => setDetailEmail(e.target.value)} 
+                            value={detailEmail}
+                            onChange={(e) => setDetailEmail(e.target.value)}
                             placeholder="sarah.j@company.com"
                             leftIcon={<Mail className="h-4 w-4" />}
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Phone Number</label>
-                          <Input 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Phone Number
+                          </label>
+                          <Input
                             type="tel"
-                            value={detailPhone} 
-                            onChange={(e) => setDetailPhone(e.target.value)} 
+                            value={detailPhone}
+                            onChange={(e) => setDetailPhone(e.target.value)}
                             placeholder="+1 (555) 382-9901"
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Date of Birth</label>
-                          <Input 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Date of Birth
+                          </label>
+                          <Input
                             type="date"
-                            value={detailDob} 
-                            onChange={(e) => setDetailDob(e.target.value)} 
+                            value={detailDob}
+                            onChange={(e) => setDetailDob(e.target.value)}
                             leftIcon={<Calendar className="h-4 w-4" />}
                           />
                         </div>
@@ -914,25 +1067,30 @@ export default function SampleUsers() {
                         Mailing & Billing Address
                       </CardTitle>
                       <CardDescription className="text-xs text-muted-foreground">
-                        Official registered physical address for billing, tax filings and physical correspondence.
+                        Official registered physical address for billing, tax
+                        filings and physical correspondence.
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="p-5 space-y-4">
                       {/* Row 1: Street, Suite/Unit (2 Columns) */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="md:col-span-2 space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Street Address</label>
-                          <Input 
-                            value={detailStreet} 
-                            onChange={(e) => setDetailStreet(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Street Address
+                          </label>
+                          <Input
+                            value={detailStreet}
+                            onChange={(e) => setDetailStreet(e.target.value)}
                             placeholder="e.g. 1428 Elm Street"
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Apt / Suite / Unit</label>
-                          <Input 
-                            value={detailSuite} 
-                            onChange={(e) => setDetailSuite(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Apt / Suite / Unit
+                          </label>
+                          <Input
+                            value={detailSuite}
+                            onChange={(e) => setDetailSuite(e.target.value)}
                             placeholder="e.g. Suite 4B"
                           />
                         </div>
@@ -941,40 +1099,56 @@ export default function SampleUsers() {
                       {/* Row 2: City, State, ZIP, Country (4 Columns in a row) */}
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">City</label>
-                          <Input 
-                            value={detailCity} 
-                            onChange={(e) => setDetailCity(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            City
+                          </label>
+                          <Input
+                            value={detailCity}
+                            onChange={(e) => setDetailCity(e.target.value)}
                             placeholder="San Francisco"
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">State / Region</label>
-                          <Input 
-                            value={detailState} 
-                            onChange={(e) => setDetailState(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            State / Region
+                          </label>
+                          <Input
+                            value={detailState}
+                            onChange={(e) => setDetailState(e.target.value)}
                             placeholder="CA"
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">ZIP / Postal Code</label>
-                          <Input 
-                            value={detailZip} 
-                            onChange={(e) => setDetailZip(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            ZIP / Postal Code
+                          </label>
+                          <Input
+                            value={detailZip}
+                            onChange={(e) => setDetailZip(e.target.value)}
                             placeholder="94109"
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Country</label>
-                          <Select value={detailCountry} onValueChange={setDetailCountry}>
+                          <label className="text-xs font-medium text-foreground/80">
+                            Country
+                          </label>
+                          <Select
+                            value={detailCountry}
+                            onValueChange={setDetailCountry}>
                             <SelectTrigger>
                               <SelectValue placeholder="Select Country" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="United States">United States</SelectItem>
+                              <SelectItem value="United States">
+                                United States
+                              </SelectItem>
                               <SelectItem value="Canada">Canada</SelectItem>
-                              <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-                              <SelectItem value="Australia">Australia</SelectItem>
+                              <SelectItem value="United Kingdom">
+                                United Kingdom
+                              </SelectItem>
+                              <SelectItem value="Australia">
+                                Australia
+                              </SelectItem>
                               <SelectItem value="Germany">Germany</SelectItem>
                               <SelectItem value="Japan">Japan</SelectItem>
                             </SelectContent>
@@ -992,39 +1166,58 @@ export default function SampleUsers() {
                         Government ID & Identification Credentials
                       </CardTitle>
                       <CardDescription className="text-xs text-muted-foreground">
-                        Document records used to fulfill regulatory and account compliance benchmarks.
+                        Document records used to fulfill regulatory and account
+                        compliance benchmarks.
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="p-5 space-y-4">
                       {/* Row 1: Doc Type, ID Number, Issuing Auth (3 Columns) */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Document Type</label>
-                          <Select value={detailDocType} onValueChange={setDetailDocType}>
+                          <label className="text-xs font-medium text-foreground/80">
+                            Document Type
+                          </label>
+                          <Select
+                            value={detailDocType}
+                            onValueChange={setDetailDocType}>
                             <SelectTrigger>
                               <SelectValue placeholder="Select Type" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="Passport">Passport Document</SelectItem>
-                              <SelectItem value="National ID">National ID Card</SelectItem>
-                              <SelectItem value="Drivers License">Driver's License</SelectItem>
-                              <SelectItem value="Social Security">Social Security Number</SelectItem>
+                              <SelectItem value="Passport">
+                                Passport Document
+                              </SelectItem>
+                              <SelectItem value="National ID">
+                                National ID Card
+                              </SelectItem>
+                              <SelectItem value="Drivers License">
+                                Driver's License
+                              </SelectItem>
+                              <SelectItem value="Social Security">
+                                Social Security Number
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Document ID Number</label>
-                          <Input 
-                            value={detailDocId} 
-                            onChange={(e) => setDetailDocId(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Document ID Number
+                          </label>
+                          <Input
+                            value={detailDocId}
+                            onChange={(e) => setDetailDocId(e.target.value)}
                             placeholder="US-P8829910"
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Issuing Authority</label>
-                          <Input 
-                            value={detailIssuingAuth} 
-                            onChange={(e) => setDetailIssuingAuth(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Issuing Authority
+                          </label>
+                          <Input
+                            value={detailIssuingAuth}
+                            onChange={(e) =>
+                              setDetailIssuingAuth(e.target.value)
+                            }
                             placeholder="US Department of State"
                           />
                         </div>
@@ -1033,20 +1226,26 @@ export default function SampleUsers() {
                       {/* Row 2: Issue Date, Expiry Date (2 Columns) */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Date of Issuance</label>
-                          <Input 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Date of Issuance
+                          </label>
+                          <Input
                             type="date"
-                            value={detailIssueDate} 
-                            onChange={(e) => setDetailIssueDate(e.target.value)} 
+                            value={detailIssueDate}
+                            onChange={(e) => setDetailIssueDate(e.target.value)}
                             leftIcon={<Calendar className="h-4 w-4" />}
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Date of Expiration</label>
-                          <Input 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Date of Expiration
+                          </label>
+                          <Input
                             type="date"
-                            value={detailExpiryDate} 
-                            onChange={(e) => setDetailExpiryDate(e.target.value)} 
+                            value={detailExpiryDate}
+                            onChange={(e) =>
+                              setDetailExpiryDate(e.target.value)
+                            }
                             leftIcon={<Calendar className="h-4 w-4" />}
                           />
                         </div>
@@ -1062,25 +1261,32 @@ export default function SampleUsers() {
                         Bank & Credit Card Information
                       </CardTitle>
                       <CardDescription className="text-xs text-muted-foreground">
-                        Confidential settlement accounts. Credentials are encrypted and tokenized.
+                        Confidential settlement accounts. Credentials are
+                        encrypted and tokenized.
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="p-5 space-y-4">
                       {/* Row 1: Bank Name, Cardholder Name (2 Columns) */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Receiving Bank Name</label>
-                          <Input 
-                            value={detailBankName} 
-                            onChange={(e) => setDetailBankName(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Receiving Bank Name
+                          </label>
+                          <Input
+                            value={detailBankName}
+                            onChange={(e) => setDetailBankName(e.target.value)}
                             placeholder="e.g. Chase Bank N.A."
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Cardholder Full Name</label>
-                          <Input 
-                            value={detailCardholderName} 
-                            onChange={(e) => setDetailCardholderName(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Cardholder Full Name
+                          </label>
+                          <Input
+                            value={detailCardholderName}
+                            onChange={(e) =>
+                              setDetailCardholderName(e.target.value)
+                            }
                             placeholder="e.g. SARAH JENKINS"
                           />
                         </div>
@@ -1089,27 +1295,37 @@ export default function SampleUsers() {
                       {/* Row 2: Card Number, Expiration, CVV (3 Columns in a grid) */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="md:col-span-1 space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Card Number</label>
-                          <Input 
-                            value={detailCardNumber} 
-                            onChange={(e) => setDetailCardNumber(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Card Number
+                          </label>
+                          <Input
+                            value={detailCardNumber}
+                            onChange={(e) =>
+                              setDetailCardNumber(e.target.value)
+                            }
                             placeholder="4111 2222 3333 4444"
                             leftIcon={<CreditCard className="h-4 w-4" />}
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Expiration Date (MM/YY)</label>
-                          <Input 
-                            value={detailCardExpiry} 
-                            onChange={(e) => setDetailCardExpiry(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Expiration Date (MM/YY)
+                          </label>
+                          <Input
+                            value={detailCardExpiry}
+                            onChange={(e) =>
+                              setDetailCardExpiry(e.target.value)
+                            }
                             placeholder="MM/YY"
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-xs font-medium text-foreground/80">Security Code (CVV)</label>
-                          <Input 
-                            value={detailCardCvv} 
-                            onChange={(e) => setDetailCardCvv(e.target.value)} 
+                          <label className="text-xs font-medium text-foreground/80">
+                            Security Code (CVV)
+                          </label>
+                          <Input
+                            value={detailCardCvv}
+                            onChange={(e) => setDetailCardCvv(e.target.value)}
                             placeholder="e.g. 123"
                             type="password"
                             maxLength={4}
@@ -1118,29 +1334,26 @@ export default function SampleUsers() {
                       </div>
                     </CardContent>
                   </Card>
-
                 </div>
               </div>
             </div>
 
             {/* Modal Fixed Footer inside full viewport */}
             <ModalFooter className="flex-shrink-0 border-t border-border/40 pt-4 mt-4 bg-background pr-2">
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 size="lg"
-                onClick={() => setIsFullModalOpen(false)}
-              >
+                onClick={() => setIsFullModalOpen(false)}>
                 Dismiss Form
               </Button>
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 size="lg"
                 onClick={() => {
                   console.log("Saving detailed profile form data...");
                   setIsFullModalOpen(false);
-                }}
-              >
+                }}>
                 Save Detailed Profile
               </Button>
             </ModalFooter>

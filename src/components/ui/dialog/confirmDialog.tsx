@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 //Components
-import { Button } from "../button/button";
+import { Button } from "src/components/ui/button/button";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -13,7 +13,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./alertDialog";
+} from "src/components/ui/dialog/alertDialog";
 
 interface ConfirmDialogProps {
   open: boolean;

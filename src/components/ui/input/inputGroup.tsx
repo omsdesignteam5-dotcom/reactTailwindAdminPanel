@@ -1,7 +1,7 @@
 import React from "react";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 type InputGroupProps = React.HTMLAttributes<HTMLDivElement>;
 

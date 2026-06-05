@@ -7,7 +7,7 @@ import {
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 const AlertDialog = AlertDialogPrimitive.Root;
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
@@ -99,7 +99,7 @@ const AlertDialogDescription = forwardRef<
 ));
 AlertDialogDescription.displayName = "AlertDialogDescription";
 
-import { Button, type ButtonProps } from "../button/button";
+import { Button, type ButtonProps } from "src/components/ui/button/button";
 
 const AlertDialogAction = forwardRef<
   ComponentRef<typeof AlertDialogPrimitive.Action>,

@@ -7,7 +7,7 @@ import {
   getLocalStorageCurrentUserId,
   getLocalStorageToken,
   removeAllLocalStorageItems,
-} from "./localStorage";
+} from "src/services/localStorage";
 
 type NullableString = string | null | undefined;
 type CommonHeaders = Record<string, string>;

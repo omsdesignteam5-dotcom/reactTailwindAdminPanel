@@ -4,19 +4,19 @@ import { useEffect } from "react";
 import { Check, Moon, Sun, Monitor } from "lucide-react";
 
 //Utils
-import { cn } from "../../utils/utils";
+import { cn } from "src/utils/utils";
 
 //Components
-import { Button } from "../ui/button/button";
+import { Button } from "src/components/ui/button/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown/dropdownMenu";
+} from "src/components/ui/dropdown/dropdownMenu";
 
 //Context
-import { useTheme } from "../../context/themeContext";
+import { useTheme } from "src/context/themeContext";
 
 export function ThemeSwitch() {
   const { theme, setTheme } = useTheme();

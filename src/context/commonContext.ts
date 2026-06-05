@@ -1,6 +1,11 @@
 import React from "react";
 
-export const CommonContext = React.createContext({
+export interface CommonContextValue {
+  languageData: Record<string, string>;
+  connection: unknown | null;
+}
+
+export const CommonContext = React.createContext<CommonContextValue>({
   languageData: {},
   connection: null,
 });

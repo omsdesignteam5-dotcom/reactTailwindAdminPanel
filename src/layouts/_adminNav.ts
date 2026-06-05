@@ -1,40 +1,36 @@
-//icons
+// icons
 import { LayoutDashboard, Settings, Users } from "lucide-react";
 
-//components
-import type { SidebarData } from "./sidebarTypes";
+// components
+import type { SidebarData } from "src/layouts/sidebarTypes";
 
 export const adminNav: SidebarData = {
   navItems: [
     {
       component: "item",
-      title: "Dashboard",
       name: "dashboard",
       url: "/dashboard",
       icon: LayoutDashboard,
     },
     {
       component: "item",
-      title: "Sample Users",
       name: "sampleUsers",
       url: "/sample-users",
       icon: Users,
     },
     {
-      component: "item",
-      title: "Settings",
-      name: "settings",
+      component: "group",
+      name: "setting",
       url: "/setting",
       icon: Settings,
-      // _children: [
-      //   {
-      //     component: "item",
-      //     title: "School Settings",
-      //     name: "schoolSettings",
-      //     url: "/setting",
-      //     icon: Settings,
-      //   },
-      // ],
+      _children: [
+        {
+          component: "item",
+          name: "users",
+          url: "/setting/users",
+          icon: Users,
+        },
+      ],
     },
   ],
 };

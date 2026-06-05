@@ -5,22 +5,25 @@ import { forwardRef, type ComponentProps, type ComponentRef } from "react";
 import { X } from "lucide-react";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 //Types
-import type { ToastVariant, ToastPosition } from "./useToast";
+import type {
+  ToastVariant,
+  ToastPosition,
+} from "src/components/ui/toast/useToast";
 
 /* ── provider ───────────────────────────── */
 const ToastProvider = ToastPrimitive.Provider;
 
 /* ── viewport ───────────────────────────── */
 const positionClasses: Record<ToastPosition, string> = {
-  "top-left": "top-0 left-0",
-  "top-right": "top-0 right-0",
-  "top-center": "top-0 left-[50%] -translate-x-[50%]",
-  "bottom-left": "bottom-0 left-0",
-  "bottom-right": "bottom-0 right-0",
-  "bottom-center": "bottom-0 left-[50%] -translate-x-[50%]",
+  "top-left": "top-20 left-4",
+  "top-right": "top-20 right-4",
+  "top-center": "top-20 left-[50%] -translate-x-[50%]",
+  "bottom-left": "bottom-4 left-4",
+  "bottom-right": "bottom-4 right-4",
+  "bottom-center": "bottom-4 left-[50%] -translate-x-[50%]",
 };
 
 interface ToastViewportProps extends ComponentProps<
@@ -36,8 +39,13 @@ const ToastViewport = forwardRef<
   <ToastPrimitive.Viewport
     ref={ref}
     className={cn(
-      "fixed z-100 flex max-h-screen w-full p-4 sm:max-w-105",
+      "fixed z-[9999] flex max-h-screen w-auto max-w-[360px] gap-2",
       position.startsWith("top") ? "flex-col" : "flex-col-reverse",
+      position.endsWith("right")
+        ? "items-end"
+        : position.endsWith("left")
+          ? "items-start"
+          : "items-center",
       positionClasses[position],
       className,
     )}
@@ -72,7 +80,7 @@ const Toast = forwardRef<ComponentRef<typeof ToastPrimitive.Root>, ToastProps>(
       ref={ref}
       data-position={position}
       className={cn(
-        "toast-item group pointer-events-auto relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-md border p-4 shadow-lg transition-all",
+        "toast-item group pointer-events-auto relative flex w-[320px] max-w-[calc(100vw-2rem)] items-center justify-between gap-4 overflow-hidden rounded-md border p-4 shadow-lg transition-all",
         variantClasses[variant],
         className,
       )}

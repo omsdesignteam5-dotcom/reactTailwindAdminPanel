@@ -11,38 +11,37 @@ import {
 } from "lucide-react";
 
 //Utils
-import { cn } from "../utils/utils";
+import { cn } from "src/utils/utils";
 
 //Context
-import { useSidebar } from "../context/sidebarContext";
+import { useSidebar } from "src/context/sidebarContext";
 
 //Data
-import { adminNav } from "./_adminNav";
+import { adminNav } from "src/layouts/_adminNav";
 
 //Component
-import { Button } from "../components/ui/button/button";
-import { ThemeSwitch } from "../components/ui/themeSwtich";
-import { Notifications } from "../components/ui/notification";
-import { SettingsDrawer } from "../components/ui/settingDrawer";
-import { Separator } from "../components/ui/separator/separator";
-import { ProfileDropdown } from "../components/ui/profileDropdown";
+import { Button } from "src/components/ui/button/button";
+import { ThemeSwitch } from "src/components/ui/themeSwtich";
+import { Notifications } from "src/components/ui/notification";
+import { SettingsDrawer } from "src/components/ui/settingDrawer";
+import { Separator } from "src/components/ui/separator/separator";
+import { ProfileDropdown } from "src/components/ui/profileDropdown";
+import { LanguageDropdown } from "src/components/ui/languageDropdown";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../components/ui/tooltip/tooltip";
+} from "src/components/ui/tooltip/tooltip";
 
 interface HeaderProps {
   title?: string;
   languages?: [];
 }
 
-export function Header({ title, languages }: HeaderProps) {
+export function Header({ title, languages = [] }: HeaderProps) {
   const { layout, isOpen, toggle, isMobile } = useSidebar();
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
-
-  console.log(languages, "languages in header");
 
   useEffect(() => {
     const onScroll = () => {
@@ -180,6 +179,7 @@ export function Header({ title, languages }: HeaderProps) {
 
         {/* Right side icons */}
         <div className="flex items-center gap-1">
+          <LanguageDropdown languages={languages} />
           <Notifications />
           <ThemeSwitch />
           <SettingsDrawer />

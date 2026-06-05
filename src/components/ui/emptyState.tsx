@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 //Utils
-import { cn } from "../../utils/utils";
+import { cn } from "src/utils/utils";
 
 interface EmptyStateProps {
   icon?: ReactNode;

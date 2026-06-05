@@ -5,7 +5,7 @@ import { forwardRef, type ComponentProps, type ReactNode } from "react";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 const Breadcrumb = forwardRef<
   HTMLElement,

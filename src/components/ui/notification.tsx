@@ -4,13 +4,17 @@ import { Link } from "react-router-dom";
 import { Bell, ClipboardList, GraduationCap, Users, Clock } from "lucide-react";
 
 //Components
-import { Badge } from "./badge/badge";
-import { Button } from "./button/button";
-import { ScrollArea } from "./scrollArea/scrollArea";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover/popover";
+import { Badge } from "src/components/ui/badge/badge";
+import { Button } from "src/components/ui/button/button";
+import { ScrollArea } from "src/components/ui/scrollArea/scrollArea";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "src/components/ui/popover/popover";
 
 //Utils
-import { cn } from "../../utils/utils";
+import { cn } from "src/utils/utils";
 
 export const mockNotifications = [
   {

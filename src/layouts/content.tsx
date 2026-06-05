@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 //routes
-import routes from "../routes/public";
+import routes from "src/routes/public";
 
 export default function Content() {
   return (

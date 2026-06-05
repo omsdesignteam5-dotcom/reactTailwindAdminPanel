@@ -1,11 +1,11 @@
 import { AxiosResponse } from "axios";
 
 //Services
-import http from "../services/httpService";
-import { setLocalStorageLanguageId } from "../services/localStorage";
+import http from "src/services/httpService";
+import { setLocalStorageLanguageId } from "src/services/localStorage";
 
 //Config
-import config from "../config/config.json";
+import config from "src/config/config.json";
 
 const { apiUrl } = config;
 
@@ -25,6 +25,12 @@ export interface LanguagesApiResponse {
   data: LanguageData[];
 }
 
+export interface LanguageContentResponse {
+  data: Record<string, string>;
+  // if your API returns different shape, adjust this
+  // e.g. data: { [key: string]: string }
+}
+
 export type LanguageListParams = Record<string, unknown>;
 
 export function getAllLanguages(): Promise<
@@ -42,8 +48,12 @@ export async function setLanguage(data: LanguageData): Promise<void> {
   window.location.reload();
 }
 
-export function getLanguageData(path: string): Promise<unknown> {
-  return http.get(apiEndPoint + "getLanguageByCode/" + path);
+export function getLanguageData(
+  path: string,
+): Promise<AxiosResponse<LanguageContentResponse>> {
+  return http.get<LanguageContentResponse>(
+    apiEndPoint + "getLanguageByCode/" + path,
+  );
 }
 
 export function getCurrentLanguage(): LanguageData | null {

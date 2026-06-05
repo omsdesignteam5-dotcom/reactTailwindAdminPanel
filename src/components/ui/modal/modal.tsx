@@ -10,7 +10,7 @@ import {
 import { X } from "lucide-react";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 const Modal = DialogPrimitive.Root;
 const ModalTrigger = DialogPrimitive.Trigger;
@@ -55,7 +55,8 @@ const ModalContent = forwardRef<
       className={cn(
         size === "full" ? "dialog-content-full" : "dialog-content",
         "origin-center fixed z-50 grid bg-background shadow-lg overflow-y-auto",
-        size !== "full" && "left-1/2 top-1/2 w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 border border-border p-6 rounded-lg max-h-[calc(100dvh-2rem)]",
+        size !== "full" &&
+          "left-1/2 top-1/2 w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 border border-border p-6 rounded-lg max-h-[calc(100dvh-2rem)]",
         sizeClasses[size],
         className,
       )}

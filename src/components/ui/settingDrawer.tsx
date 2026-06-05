@@ -9,10 +9,10 @@ import {
 } from "lucide-react";
 
 //Utils
-import { cn } from "../../utils/utils";
+import { cn } from "src/utils/utils";
 
 //Components
-import { Button } from "./button/button";
+import { Button } from "src/components/ui/button/button";
 import {
   Sheet,
   SheetContent,
@@ -21,11 +21,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./sheet/sheet";
+} from "src/components/ui/sheet/sheet";
 
 //Context
-import { useTheme } from "../../context/themeContext";
-import { useSidebar } from "../../context/sidebarContext";
+import { useTheme } from "src/context/themeContext";
+import { useSidebar } from "src/context/sidebarContext";
 
 export function SettingsDrawer() {
   const { resetTheme } = useTheme();

@@ -1,14 +1,14 @@
 import React from "react";
 
 //Components
-import Footer from "./footer";
-import Content from "./content";
-import { Header } from "./header";
-import { Sidebar } from "./sidebar";
+import Footer from "src/layouts/footer";
+import Content from "src/layouts/content";
+import { Header } from "src/layouts/header";
+import { Sidebar } from "src/layouts/sidebar";
 
 //Provider
-import { SidebarProvider } from "../context/sidebarContext";
-import { TooltipProvider } from "../components/ui/tooltip/tooltip";
+import { SidebarProvider } from "src/context/sidebarContext";
+import { TooltipProvider } from "src/components/ui/tooltip/tooltip";
 
 export default function DefaultLayout({ ...props }) {
   return (

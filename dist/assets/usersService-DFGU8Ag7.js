@@ -1,0 +1,1 @@
+import{a0 as s,K as r}from"./index-BXddbymq.js";const t=r.apiUrl+"api/user/";async function o(e){return(await s.get(t+"getList",{params:e})).data}async function c(e){return(await s.get(t+"getById/"+e)).data}async function p(e){return(await s.post(t+"createOrUpdateUser",e)).data}async function i(e){return(await s.post(t+"deleteUser/"+e)).data}export{o as a,p as c,i as d,c as g};

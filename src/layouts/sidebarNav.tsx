@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import * as Collapsible from "@radix-ui/react-collapsible";
 
@@ -6,17 +6,18 @@ import * as Collapsible from "@radix-ui/react-collapsible";
 import { ChevronRight } from "lucide-react";
 
 //utils
-import { cn } from "../utils/utils";
+import { cn } from "src/utils/utils";
 
 //context
-import { useSidebar } from "../context/sidebarContext";
+import CommonContext from "src/context/commonContext";
+import { useSidebar } from "src/context/sidebarContext";
 
 //components
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../components/ui/tooltip/tooltip";
+} from "src/components/ui/tooltip/tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +25,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../components/ui/dropdown/dropdownMenu";
+} from "src/components/ui/dropdown/dropdownMenu";
 
 //types
 import type {
@@ -32,7 +33,7 @@ import type {
   NavLink as NavLinkType,
   NavCollapsible as NavCollapsibleType,
   NavItem,
-} from "./sidebarTypes";
+} from "src/layouts/sidebarTypes";
 
 interface SidebarNavProps {
   groups: NavGroupType[];
@@ -83,7 +84,9 @@ function SidebarMenuLink({ item }: { item: NavLinkType }) {
   const isOpen = useIsNavExpanded();
   const { isMobile, setOpen } = useSidebar();
   const { pathname } = useLocation();
+  const { languageData } = useContext(CommonContext);
   const isActive = pathname === item.url;
+  const label = languageData[item.name ?? ""] ?? item.name ?? "";
 
   const linkContent = (
     <Link
@@ -97,7 +100,7 @@ function SidebarMenuLink({ item }: { item: NavLinkType }) {
         isActive
           ? cn(
               "bg-white/20 text-white font-semibold",
-              isOpen && "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+              isOpen && "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]",
             )
           : "text-sidebar-foreground/85",
         !isOpen && "justify-center px-0",

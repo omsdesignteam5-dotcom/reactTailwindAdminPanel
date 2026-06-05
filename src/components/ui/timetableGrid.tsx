@@ -1,5 +1,5 @@
 //Utils
-import { cn } from "../../utils/utils";
+import { cn } from "src/utils/utils";
 
 const WEEKDAYS = [
   "Monday",

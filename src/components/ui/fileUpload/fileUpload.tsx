@@ -7,13 +7,21 @@ import {
 } from "react";
 
 //Icons
-import { Upload, X, File as FileIcon, Image as ImageIcon, FileText, FileSpreadsheet, FileArchive } from "lucide-react";
+import {
+  Upload,
+  X,
+  File as FileIcon,
+  Image as ImageIcon,
+  FileText,
+  FileSpreadsheet,
+  FileArchive,
+} from "lucide-react";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 //Components
-import { Button } from "../button/button";
+import { Button } from "src/components/ui/button/button";
 
 interface FileUploadProps {
   accept?: string;
@@ -32,9 +40,21 @@ interface FileWithPreview {
 function getFileIcon(file: File) {
   const type = file.type;
   if (type.startsWith("image/")) return <ImageIcon className="h-4 w-4" />;
-  if (type === "application/pdf" || type.includes("document")) return <FileText className="h-4 w-4" />;
-  if (type.includes("spreadsheet") || type.includes("csv") || type.includes("excel")) return <FileSpreadsheet className="h-4 w-4" />;
-  if (type.includes("zip") || type.includes("rar") || type.includes("tar") || type.includes("archive")) return <FileArchive className="h-4 w-4" />;
+  if (type === "application/pdf" || type.includes("document"))
+    return <FileText className="h-4 w-4" />;
+  if (
+    type.includes("spreadsheet") ||
+    type.includes("csv") ||
+    type.includes("excel")
+  )
+    return <FileSpreadsheet className="h-4 w-4" />;
+  if (
+    type.includes("zip") ||
+    type.includes("rar") ||
+    type.includes("tar") ||
+    type.includes("archive")
+  )
+    return <FileArchive className="h-4 w-4" />;
   return <FileIcon className="h-4 w-4" />;
 }
 

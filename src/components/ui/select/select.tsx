@@ -5,7 +5,7 @@ import { forwardRef, type ComponentProps, type ComponentRef } from "react";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 const Select = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
@@ -144,6 +144,78 @@ const SelectSeparator = forwardRef<
 ));
 SelectSeparator.displayName = "SelectSeparator";
 
+type FilterSelectOption = {
+  id?: string | number;
+  value?: string | number;
+  label?: string;
+  name?: string;
+};
+
+type FilterSelectProps = {
+  name?: string;
+  placeholder?: string;
+  value?: unknown;
+  onChange: (value: unknown) => void;
+  options?: FilterSelectOption[];
+  disabled?: boolean;
+  className?: string;
+};
+
+const resolveSelectedValue = (value: unknown): string => {
+  if (value == null) return "";
+
+  if (typeof value === "object") {
+    const obj = value as Record<string, unknown>;
+    const raw = obj.value ?? obj.id ?? "";
+    return String(raw);
+  }
+
+  return String(value);
+};
+
+const resolveOptionValue = (opt: FilterSelectOption): string => {
+  return String(opt.value ?? opt.id ?? "");
+};
+
+const resolveOptionLabel = (opt: FilterSelectOption): string => {
+  return String(opt.label ?? opt.name ?? opt.value ?? opt.id ?? "Unknown");
+};
+
+const FilterSelect = ({
+  placeholder = "Select option",
+  value,
+  onChange,
+  options = [],
+  disabled = false,
+  className,
+}: FilterSelectProps) => {
+  const selectedValue = resolveSelectedValue(value);
+
+  return (
+    <Select
+      value={selectedValue}
+      onValueChange={(next) => onChange({ value: next })}
+      disabled={disabled}>
+      <SelectTrigger className={className}>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+
+      <SelectContent>
+        {options.map((opt, index) => {
+          const optionValue = resolveOptionValue(opt);
+          const optionLabel = resolveOptionLabel(opt);
+
+          return (
+            <SelectItem key={optionValue + "-" + index} value={optionValue}>
+              {optionLabel}
+            </SelectItem>
+          );
+        })}
+      </SelectContent>
+    </Select>
+  );
+};
+
 export {
   Select,
   SelectGroup,
@@ -155,4 +227,5 @@ export {
   SelectSeparator,
   SelectScrollUpButton,
   SelectScrollDownButton,
+  FilterSelect,
 };

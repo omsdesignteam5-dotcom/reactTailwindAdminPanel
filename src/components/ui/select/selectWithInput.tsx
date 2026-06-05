@@ -4,17 +4,17 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 
 //Components
-import { Input } from "../input/input";
+import { Input } from "src/components/ui/input/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./select";
+} from "src/components/ui/select/select";
 
 //Utils
-import { cn } from "../../../utils/utils";
+import { cn } from "src/utils/utils";
 
 type Option = {
   label: string;

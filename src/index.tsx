@@ -3,16 +3,16 @@ import { Provider } from "react-redux";
 import ReactDOM from "react-dom/client";
 
 //CSS
-import "./index.css";
+import "src/index.css";
 
 //Components
-import App from "./App";
+import App from "src/App";
 
 //Store
-import store from "./store";
+import store from "src/store";
 
 //Performance
-import reportWebVitals from "./reportWebVitals";
+import reportWebVitals from "src/reportWebVitals";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,

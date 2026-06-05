@@ -4,10 +4,15 @@ import type { ReactNode } from "react";
 import { TrendingUp, TrendingDown } from "lucide-react";
 
 //Utils
-import { cn } from "../../utils/utils";
+import { cn } from "src/utils/utils";
 
 //Components
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "src/components/ui/card/card";
 
 interface StatsCardProps {
   title: string;
