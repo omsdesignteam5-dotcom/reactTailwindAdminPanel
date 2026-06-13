@@ -121,6 +121,14 @@ export const getLocalStorageLanguageImage = (): string | null =>
 export const removeLocalStorageLanguageImage = (): void =>
   removeKey(KEYS.languageImage);
 
+// Shop Route
+export const setLocalStorageCurrentShopRoute = (data: string): void =>
+  setString(KEYS.currentShopRoute, data);
+export const getLocalStorageCurrentShopRoute = (): string | null =>
+  getString(KEYS.currentShopRoute);
+export const removeLocalStorageCurrentShopRoute = (): void =>
+  removeKey(KEYS.currentShopRoute);
+
 // Shop IDs
 export const setLocalStorageBranchShopId = (data: string): void =>
   setString(KEYS.branchShopId, data);

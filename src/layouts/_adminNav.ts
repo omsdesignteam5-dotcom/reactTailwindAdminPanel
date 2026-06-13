@@ -1,5 +1,5 @@
 // icons
-import { LayoutDashboard, Settings, Users } from "lucide-react";
+import { LayoutDashboard, Settings, Users, Map } from "lucide-react";
 
 // components
 import type { SidebarData } from "src/layouts/sidebarTypes";
@@ -15,8 +15,14 @@ export const adminNav: SidebarData = {
     {
       component: "item",
       name: "sampleUsers",
-      url: "/sample-users",
+      url: "/sampleUsers",
       icon: Users,
+    },
+    {
+      component: "item",
+      name: "sampleMap",
+      url: "/sampleMap",
+      icon: Map,
     },
     {
       component: "group",

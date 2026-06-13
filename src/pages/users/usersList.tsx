@@ -253,6 +253,17 @@ export default function UsersList() {
 
   const tableRows = useMemo(() => data as unknown as TableRowData[], [data]);
 
+  const translatedStatusOptions = useMemo(
+    () =>
+      status.map((opt) => ({
+        ...opt,
+        label:
+          languageData[opt.label as keyof typeof languageData] ?? opt.label,
+        name: languageData[opt.name as keyof typeof languageData] ?? opt.name,
+      })),
+    [status, languageData],
+  );
+
   const filterData = useMemo(
     () => [
       {
@@ -285,12 +296,12 @@ export default function UsersList() {
         placeholder: languageData.pleaseSelectStatus,
         render: Select as React.ComponentType<any>,
         isCustomSelect: true,
-        options: status,
+        options: translatedStatusOptions,
         defaultText: languageData.pleaseSelectStatus,
         isShow: true,
       },
     ],
-    [status, languageData],
+    [status, languageData, translatedStatusOptions],
   );
 
   return (

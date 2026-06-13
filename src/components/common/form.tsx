@@ -507,24 +507,42 @@ export const RenderImageCrop = <TValues extends FormValues = FormValues>({
   onChange,
   formik,
   className,
-  src,
+  value,
   aspect,
   maxSizeMB,
   multiple = false,
+  // Upload / Delete props
+  getFile,
+  type,
+  optionId,
+  allowedExtensions,
+  cancelImgUploading,
+  uploadedImage,
+  onUploadStart,
+  onUploadComplete,
 }: BaseRenderProps<TValues>) => {
   return (
     <ImageCrop
-      src={src}
+      value={value as string | undefined}
       aspect={aspect}
       maxSizeMB={maxSizeMB}
-      multiple={Boolean(multiple)}
       className={className}
       onCroppedImage={(file) => {
+        console.log(file, "File in image Crop");
         const nextValue = Boolean(multiple)
           ? [...((formik.values[name] as File[]) ?? []), file]
           : file;
         onChange({ ...formik.values, [name]: nextValue } as TValues, name);
       }}
+      // Upload / Delete props
+      getFile={getFile}
+      type={type}
+      optionId={optionId}
+      allowedExtensions={allowedExtensions}
+      cancelImgUploading={cancelImgUploading}
+      uploadedImage={uploadedImage}
+      onUploadStart={onUploadStart}
+      onUploadComplete={onUploadComplete}
     />
   );
 };

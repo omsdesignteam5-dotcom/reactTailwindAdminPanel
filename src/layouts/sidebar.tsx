@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 // Icons
 import { Command } from "lucide-react";
@@ -12,6 +12,7 @@ import { ScrollArea } from "src/components/ui/scrollArea/scrollArea";
 import { Sheet, SheetContent, SheetTitle } from "src/components/ui/sheet/sheet";
 
 // Context
+import { useTheme } from "src/context/themeContext";
 import CommonContext from "src/context/commonContext";
 import { useSidebar, type SidebarTheme } from "src/context/sidebarContext";
 
@@ -51,8 +52,14 @@ const isNavEntryItem = (entry: unknown): entry is NavEntryItem => {
 };
 
 export function Sidebar() {
-  const { layout, isOpen, isMobile, setOpen, sidebarTheme } = useSidebar();
+  const { layout, isOpen, isMobile, setOpen, sidebarTheme, setSidebarTheme } =
+    useSidebar();
+  const { resolvedTheme } = useTheme();
   const { languageData } = useContext(CommonContext);
+
+  useEffect(() => {
+    setSidebarTheme(resolvedTheme === "light" ? "frost" : "default");
+  }, [resolvedTheme, setSidebarTheme]);
 
   const navItemsAsGroups: NavGroup[] = (adminNav.navItems ?? []).map(
     (entry): NavGroup => {

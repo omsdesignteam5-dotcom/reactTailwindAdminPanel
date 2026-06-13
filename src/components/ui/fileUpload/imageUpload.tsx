@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   useCallback,
   useEffect,
@@ -14,8 +15,12 @@ import ReactCrop, {
   type PixelCrop,
 } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { Upload, Plus, X, Trash2 } from "lucide-react";
 
+//Icons
+import { Upload, Trash2 } from "lucide-react";
+
+//Components
+import { Image } from "src/components/ui/image/image";
 import { Button } from "src/components/ui/button/button";
 import {
   Modal,
@@ -24,7 +29,13 @@ import {
   ModalHeader,
   ModalTitle,
 } from "src/components/ui/modal/modal";
-import { cn } from "src/utils/utils";
+import { useToast } from "src/components/ui/toast/useToast";
+
+//Utils
+import { cn, extractImageFileExtensionFromBase64 } from "src/utils/utils";
+
+//Config
+import { imageUploadUrl, imageDeleteUrl } from "src/config/config.json";
 
 interface CroppedImage {
   file: File;
@@ -32,13 +43,25 @@ interface CroppedImage {
 }
 
 interface ImageCropProps {
-  src?: string;
+  value?: string; // Existing server filename (like old JSX props.value)
+  src?: string; // Full URL or filename for initial display
   aspect?: number;
   maxSizeMB?: number;
   multiple?: boolean;
   className?: string;
   onCroppedImage?: (file: File, previewUrl: string) => void;
   onImagesChange?: (images: CroppedImage[]) => void;
+
+  // ── Upload / Delete props ──
+  getFile?: (fileName: string | null, name?: string, optionId?: string) => void;
+  name?: string;
+  type?: string;
+  optionId?: string;
+  allowedExtensions?: string[];
+  cancelImgUploading?: boolean;
+  uploadedImage?: string;
+  onUploadStart?: () => void;
+  onUploadComplete?: (success: boolean, fileName?: string) => void;
 }
 
 function createCenteredAspectCrop(
@@ -93,6 +116,7 @@ function canvasPreview(
 }
 
 export function ImageCrop({
+  value,
   src,
   aspect = 1,
   maxSizeMB = 10,
@@ -100,6 +124,16 @@ export function ImageCrop({
   className,
   onCroppedImage,
   onImagesChange,
+  // Upload / Delete props
+  getFile,
+  name,
+  type,
+  optionId,
+  allowedExtensions,
+  cancelImgUploading = false,
+  uploadedImage: propUploadedImage,
+  onUploadStart,
+  onUploadComplete,
 }: ImageCropProps) {
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
@@ -111,12 +145,29 @@ export function ImageCrop({
   const [croppedImages, setCroppedImages] = useState<CroppedImage[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
 
+  // Upload state
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [serverImage, setServerImage] = useState("");
+
   const inputRef = useRef<HTMLInputElement>(null);
   const objectUrlsRef = useRef<string[]>([]);
+  const latestCroppedFileRef = useRef<File | null>(null);
+
+  const { toast } = useToast();
 
   const maxBytes = useMemo(() => maxSizeMB * 1024 * 1024, [maxSizeMB]);
 
-  // Seed with initial src if provided
+  // Sync with external value (like old JSX props.value)
+  useEffect(() => {
+    const val = value ?? propUploadedImage ?? "";
+    if (val) {
+      setServerImage(val);
+    }
+  }, [value, propUploadedImage]);
+
+  // Seed with initial src if provided (must be a full URL)
   useEffect(() => {
     if (src && croppedImages.length === 0) {
       setCroppedImages([
@@ -228,6 +279,188 @@ export function ImageCrop({
     setImgEl(null);
   }, []);
 
+  const removeImage = useCallback(
+    (index: number) => {
+      const updated = croppedImages.filter((_, i) => i !== index);
+      setCroppedImages(updated);
+      onImagesChange?.(updated);
+    },
+    [croppedImages, onImagesChange],
+  );
+
+  // ── Convert File to base64 ──
+  const fileToBase64 = useCallback((file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }, []);
+
+  // ── Upload image to server ──
+  const imageUpload = useCallback(async () => {
+    if (!getFile) {
+      console.warn("ImageCrop: getFile prop is required for upload");
+      return;
+    }
+
+    const file = latestCroppedFileRef.current;
+    if (!file) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "No cropped image available. Please crop the image first.",
+        position: "top-right",
+        duration: 3000,
+      });
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+    setUploadProgress(0);
+    onUploadStart?.();
+
+    try {
+      // 1. Convert file to base64 to check extension
+      const croppedBase64 = await fileToBase64(file);
+
+      // 2. Check extension
+      const imageFileExtension =
+        extractImageFileExtensionFromBase64(croppedBase64);
+      if (
+        allowedExtensions &&
+        !allowedExtensions.includes(imageFileExtension)
+      ) {
+        const errorMsg = `Allow extensions are ${allowedExtensions.join(", ")}`;
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: errorMsg,
+          position: "top-right",
+          duration: 3000,
+        });
+        setIsUploading(false);
+        return;
+      }
+
+      // 3. Build FormData and upload using the File directly
+      const formData = new FormData();
+      formData.append("myFile", file, file.name);
+      formData.append("type", type ?? "");
+
+      const response = await axios.post(imageUploadUrl, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const loaded = cancelImgUploading ? 0 : progressEvent.loaded;
+          const total = cancelImgUploading ? 0 : (progressEvent.total ?? 0);
+          const percentage = total ? Math.round((loaded * 100) / total) : 0;
+          setUploadProgress(percentage);
+        },
+      });
+
+      console.log("Upload response:", response.data);
+
+      if (response.data.result) {
+        setServerImage(response.data.name);
+        getFile(response.data.name, name, optionId);
+        setUploadProgress(0);
+        toast({
+          variant: "success",
+          title: "Success",
+          description: "Image uploaded successfully",
+          position: "top-right",
+          duration: 3000,
+        });
+        onUploadComplete?.(true, response.data.name);
+      } else {
+        setUploadError(response.data.message ?? "Upload failed");
+        getFile(null, name, optionId);
+        setUploadProgress(0);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: response.data.message ?? "Upload failed",
+          position: "top-right",
+          duration: 3000,
+        });
+        onUploadComplete?.(false);
+      }
+    } catch (error: unknown) {
+      const msg = axios.isAxiosError(error)
+        ? (error.response?.data?.message ?? error.message)
+        : "Upload failed";
+      setUploadError(msg);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: msg,
+        position: "top-right",
+        duration: 3000,
+      });
+      onUploadComplete?.(false);
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+  }, [
+    getFile,
+    fileToBase64,
+    allowedExtensions,
+    type,
+    name,
+    optionId,
+    cancelImgUploading,
+    toast,
+    onUploadStart,
+    onUploadComplete,
+  ]);
+
+  // ── Delete image from server ──
+  const deleteImage = useCallback(async () => {
+    if (!getFile) {
+      console.warn("ImageCrop: getFile prop is required for delete");
+      return;
+    }
+
+    if (!serverImage) {
+      // No server image name — just clear local state
+      removeImage(0);
+      return;
+    }
+
+    try {
+      const config = { imageName: serverImage };
+      const response = await axios.post(imageDeleteUrl, config);
+
+      if (response.data.result) {
+        setServerImage("");
+        getFile("");
+        setUploadProgress(0);
+        removeImage(0);
+        toast({
+          variant: "success",
+          title: "Success",
+          description: "Image deleted successfully",
+          position: "top-right",
+          duration: 3000,
+        });
+      }
+    } catch (error: unknown) {
+      console.error("Delete image error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete image",
+        position: "top-right",
+        duration: 3000,
+      });
+    }
+  }, [getFile, serverImage, removeImage, toast]);
+
   const onConfirmCrop = useCallback(async () => {
     if (
       !imgEl ||
@@ -271,6 +504,14 @@ export function ImageCrop({
 
     setModalOpen(false);
     setPendingImageSrc(null);
+
+    // Store the file in ref for upload
+    latestCroppedFileRef.current = file;
+
+    // Auto-upload after crop (like old JSX "Yes" button)
+    setTimeout(() => {
+      void imageUpload();
+    }, 100);
   }, [
     completedCrop,
     imgEl,
@@ -278,16 +519,8 @@ export function ImageCrop({
     croppedImages,
     onCroppedImage,
     onImagesChange,
+    imageUpload,
   ]);
-
-  const removeImage = useCallback(
-    (index: number) => {
-      const updated = croppedImages.filter((_, i) => i !== index);
-      setCroppedImages(updated);
-      onImagesChange?.(updated);
-    },
-    [croppedImages, onImagesChange],
-  );
 
   const hasImages = croppedImages.length > 0;
 
@@ -333,76 +566,30 @@ export function ImageCrop({
           isDragOver
             ? "border-primary bg-primary/5"
             : "border-border hover:border-primary/50",
-          // Single mode with image: no padding so image fills the box
-          !multiple && hasImages ? "p-0 overflow-hidden" : "p-3",
+          serverImage ? "p-0 overflow-hidden" : "p-3",
         )}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}>
-        {multiple ? (
-          /* ═══ MULTIPLE MODE ═══ */
-          hasImages ? (
-            <div className="flex flex-wrap items-start gap-3">
-              {/* Uploaded image thumbnails */}
-              {croppedImages.map((img, index) => (
-                <div
-                  key={`img-${index}`}
-                  className="relative h-28 w-28 shrink-0 overflow-hidden rounded-lg border border-border bg-muted/30 shadow-sm">
-                  <img
-                    src={img.previewUrl}
-                    alt={`Uploaded ${index + 1}`}
-                    className="h-full w-full object-cover"
-                  />
-                  {/* Delete button */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeImage(index);
-                    }}
-                    className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-destructive"
-                    title="Remove image">
-                    <Trash2 className="h-3 w-3" />
-                  </button>
-                </div>
-              ))}
-
-              {/* Add more box */}
-              <button
-                type="button"
-                onClick={openPicker}
-                className={cn(
-                  "flex h-28 w-28 shrink-0 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed transition-colors",
-                  "border-border/60 bg-muted/20 text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-primary",
-                )}>
-                <Plus className="h-6 w-6" />
-                <span className="text-[10px] font-medium">Add Photo</span>
-              </button>
-            </div>
-          ) : (
-            emptyDropZone
-          )
-        ) : /* ═══ SINGLE MODE ═══ */
-        hasImages ? (
+        {serverImage ? (
+          /* ═══ IMAGE EXISTS — show with delete (like old JSX) ═══ */
           <div className="relative">
-            {/* Uploaded image fills the area */}
-            <img
-              src={croppedImages[0].previewUrl}
+            <Image
+              name={serverImage}
               alt="Uploaded"
               className="w-full max-h-64 object-contain bg-muted/20"
+              style={{ width: "100%", height: "auto" }}
             />
-            {/* Delete button — always visible top-right */}
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                removeImage(0);
+                void deleteImage();
               }}
               className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-destructive"
               title="Remove image">
               <Trash2 className="h-3.5 w-3.5" />
             </button>
-            {/* Re-upload overlay at bottom */}
             <button
               type="button"
               onClick={openPicker}
@@ -411,7 +598,19 @@ export function ImageCrop({
               Change Photo
             </button>
           </div>
+        ) : isUploading ? (
+          /* ═══ UPLOADING — show progress ═══ */
+          <div className="flex flex-col items-center justify-center gap-2 py-6">
+            <div className="h-2 w-full max-w-xs overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full bg-primary transition-all duration-300"
+                style={{ width: `${uploadProgress}%` }}
+              />
+            </div>
+            <p className="text-sm text-muted-foreground">{uploadProgress}%</p>
+          </div>
         ) : (
+          /* ═══ NO IMAGE — show empty drop zone ═══ */
           emptyDropZone
         )}
       </div>
@@ -425,6 +624,9 @@ export function ImageCrop({
       />
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
+      {uploadError ? (
+        <p className="text-sm text-destructive">{uploadError}</p>
+      ) : null}
 
       {/* Crop Modal */}
       <Modal open={modalOpen} onOpenChange={setModalOpen}>
@@ -466,8 +668,8 @@ export function ImageCrop({
               variant="default"
               type="button"
               onClick={onConfirmCrop}
-              disabled={!completedCrop}>
-              Crop & Save
+              disabled={!completedCrop || isUploading}>
+              {isUploading ? `Uploading...` : "Upload"}
             </Button>
           </ModalFooter>
         </ModalContent>

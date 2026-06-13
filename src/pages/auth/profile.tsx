@@ -189,6 +189,17 @@ export default function Profile() {
       showHorizontal: true,
       isRequired: true,
       warningMessage: languageData.productImageSizeWarningMsg,
+      // Pass filename (like old JSX props.value)
+      value:
+        typeof formik.values.image === "string"
+          ? formik.values.image
+          : undefined,
+      // Upload callback: receives the server filename after upload
+      getFile: (fileName: string | null) => {
+        if (fileName) {
+          formik.setFieldValue("image", fileName);
+        }
+      },
     },
     {
       name: "status",
